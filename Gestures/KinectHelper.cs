@@ -11,6 +11,7 @@ namespace Gestures
         public static Skeleton[] skeletonData;
         public static List<Skeleton> skeleton;
         public static bool record = false;
+        public static bool tracking = false;
 
         public static void StartKinectST()
         {
@@ -24,21 +25,35 @@ namespace Gestures
 
             skeletonData = new Skeleton[kinect.SkeletonStream.FrameSkeletonArrayLength]; // Allocate ST data
 
+            // enable returning skeletons while depth is in Near Range
+            kinect.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
+            kinect.SkeletonStream.EnableTrackingInNearRange = true;
+            kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
 
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             kinect.Start(); // Start Kinect sensor
         }
 
-        public static void startRecording()
+        public static void startRecording(float seconds)
         {
             skeleton = new List<Skeleton>();
+            System.Console.WriteLine("Please wait while skeleton is tracked.");
+            while (!tracking)
+            {
+                tracking = skeletonData.Any(s => s != null && s.TrackingState == SkeletonTrackingState.Tracked);
+            }
+            System.Console.WriteLine("Skeleton is now tracked.");
+            ExtensionMethods.countdown();
+            System.Console.WriteLine("Now Recording");
+            //ExtensionMethods.timer(seconds);
             record = true;
         }
 
         public static List<Skeleton> stopRecording()
         {
             record = false;
+            tracking = false;
             return ExtensionMethods.DeepClone(skeleton);
         }
 

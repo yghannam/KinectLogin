@@ -22,5 +22,33 @@ namespace Gestures
                 return (T)formatter.Deserialize(stream);
             }
         }
+
+        public static void timer(float seconds)
+        {
+            DateTime startTime = DateTime.Now;
+            DateTime currentTime = DateTime.Now;
+            while (currentTime.Second - startTime.Second < seconds)
+            {
+                //if (currentTime.Second - startTime.Second % 1 == 0)
+                //    System.Console.WriteLine(currentTime.Second - startTime.Second);
+                currentTime = DateTime.Now;
+            }
+        }
+
+       public static void countdown()
+        {
+            for (int i = 5; i > 0; i--)
+            {
+                System.Console.Write(i);
+                System.Threading.Thread.Sleep(250);
+                System.Console.Write(".");
+                System.Threading.Thread.Sleep(250);
+                System.Console.Write(".");
+                System.Threading.Thread.Sleep(250);
+                System.Console.Write(".");
+                System.Threading.Thread.Sleep(250);
+            }
+            System.Console.WriteLine("GO!");
+        }
     }
 }
