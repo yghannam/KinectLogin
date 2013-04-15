@@ -18,7 +18,7 @@ namespace Gestures
 
         public List<Skeleton> getSkeletalData()
         {
-            return this.skeletalData;
+            return ExtensionMethods.DeepClone(this.skeletalData);
         }
     }
 }

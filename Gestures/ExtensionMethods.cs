@@ -17,8 +17,8 @@ namespace Gestures
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                //BinaryFormatter formatter = new BinaryFormatter();
-                XmlSerializer formatter = new XmlSerializer(typeof(Gesture));
+                BinaryFormatter formatter = new BinaryFormatter();
+                //XmlSerializer formatter = new XmlSerializer(typeof(Gesture));
                 formatter.Serialize(stream, a);
                 stream.Position = 0;
                 return (T)formatter.Deserialize(stream);

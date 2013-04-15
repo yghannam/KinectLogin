@@ -11,6 +11,7 @@ namespace Gestures
         Gesture g1 = new Gesture();
         Gesture g2 = new Gesture();
 
+        List<double> errors;
        
 
         
@@ -24,7 +25,7 @@ namespace Gestures
             KinectHelper.startRecording(seconds);
             ExtensionMethods.timer(seconds);
             g1 = KinectHelper.stopRecording();
-            System.Console.WriteLine("Finished Recording 1");
+            System.Console.WriteLine("Finished Recording 1\n");
 
             //System.Console.Write("Press ENTER to continue");
             //System.Console.ReadLine();
@@ -34,7 +35,7 @@ namespace Gestures
             KinectHelper.startRecording(seconds);
             ExtensionMethods.timer(seconds);
             g2 = KinectHelper.stopRecording();
-            System.Console.WriteLine("Finished Recording 2");
+            System.Console.WriteLine("Finished Recording 2\n");
 
         }
 
@@ -49,6 +50,7 @@ namespace Gestures
             double threshold = 50.0;
             double sum = 0.0;
             bool diff = false;
+            errors = new List<double>();
 
             List<Skeleton> s1 = g1.getSkeletalData();
             List<Skeleton> s2 = g2.getSkeletalData();
@@ -60,6 +62,7 @@ namespace Gestures
                     SkeletonPoint p1 = s1[i].Joints.ElementAt(j).Position;
                     SkeletonPoint p2 = s2[i].Joints.ElementAt(j).Position;
                     double err = error(p1, p2);
+                    errors.Add(err);
                     sum += err;
                     if (sum > threshold)
                     {
