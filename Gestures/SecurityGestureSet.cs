@@ -8,8 +8,8 @@ namespace Gestures
 {
     class SecurityGestureSet
     {
-        List<Skeleton> g1 = new List<Skeleton>();
-        List<Skeleton> g2 = new List<Skeleton>();
+        Gesture g1 = new Gesture();
+        Gesture g2 = new Gesture();
 
        
 
@@ -50,12 +50,15 @@ namespace Gestures
             double sum = 0.0;
             bool diff = false;
 
-            for (int i = 0; i < Math.Min(g1.Count, g2.Count); i++)
+            List<Skeleton> s1 = g1.getSkeletalData();
+            List<Skeleton> s2 = g2.getSkeletalData();
+
+            for (int i = 0; i < Math.Min(s1.Count, s2.Count); i++)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    SkeletonPoint p1 = g1[i].Joints.ElementAt(j).Position;
-                    SkeletonPoint p2 = g2[i].Joints.ElementAt(j).Position;
+                    SkeletonPoint p1 = s1[i].Joints.ElementAt(j).Position;
+                    SkeletonPoint p2 = s2[i].Joints.ElementAt(j).Position;
                     double err = error(p1, p2);
                     sum += err;
                     if (sum > threshold)

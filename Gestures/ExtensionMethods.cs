@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using System.IO;
 
 
@@ -16,7 +17,8 @@ namespace Gestures
         {
             using (MemoryStream stream = new MemoryStream())
             {
-                BinaryFormatter formatter = new BinaryFormatter();
+                //BinaryFormatter formatter = new BinaryFormatter();
+                XmlSerializer formatter = new XmlSerializer(typeof(Gesture));
                 formatter.Serialize(stream, a);
                 stream.Position = 0;
                 return (T)formatter.Deserialize(stream);

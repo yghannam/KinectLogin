@@ -9,7 +9,7 @@ namespace Gestures
     {
         static KinectSensor kinect = null;
         public static Skeleton[] skeletonData;
-        public static List<Skeleton> skeleton;
+        public static Gesture gesture;
         public static bool record = false;
         public static bool tracking = false;
 
@@ -37,7 +37,8 @@ namespace Gestures
 
         public static void startRecording(float seconds)
         {
-            skeleton = new List<Skeleton>();
+            gesture = new Gesture();
+            //gesture.skeletalData = new List<Skeleton>();
             System.Console.WriteLine("Please wait while skeleton is tracked.");
             while (!tracking)
             {
@@ -50,11 +51,11 @@ namespace Gestures
             record = true;
         }
 
-        public static List<Skeleton> stopRecording()
+        public static Gesture stopRecording()
         {
             record = false;
             tracking = false;
-            return ExtensionMethods.DeepClone(skeleton);
+            return ExtensionMethods.DeepClone(gesture);
         }
 
         private static void kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
@@ -72,7 +73,7 @@ namespace Gestures
                         // Save only the tracked skeleton
                         if (s.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            skeleton.Add(s);
+                            gesture.addSkeletalData(s);
                             break;
                         }
                     }
