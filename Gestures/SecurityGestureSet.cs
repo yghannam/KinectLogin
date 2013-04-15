@@ -47,13 +47,14 @@ namespace Gestures
 
         public bool compare()//Gesture g1, Gesture g2)
         {
-            double threshold = 50.0;
+            double threshold = 10.0;
             double sum = 0.0;
             bool diff = false;
             errors = new List<double>();
 
             List<Skeleton> s1 = g1.getSkeletalData();
             List<Skeleton> s2 = g2.getSkeletalData();
+            double[] jointErrors = new double[20];
 
             for (int i = 0; i < Math.Min(s1.Count, s2.Count); i++)
             {
@@ -64,7 +65,8 @@ namespace Gestures
                     double err = error(p1, p2);
                     errors.Add(err);
                     sum += err;
-                    if (sum > threshold)
+                    jointErrors[j] += err;
+                    if (jointErrors[j] > threshold)
                     {
                         diff = true;
                         break;
