@@ -33,8 +33,8 @@ namespace Gestures
             DateTime currentTime = DateTime.Now;
             while (currentTime.Second - startTime.Second < seconds)
             {
-                if (currentTime.Second - startTime.Second % 1 == 0)
-                    System.Console.WriteLine(currentTime.Second - startTime.Second);
+                //if (currentTime.Second - startTime.Second % 1 == 0)
+                //    System.Console.WriteLine(currentTime.Second - startTime.Second);
                 currentTime = DateTime.Now;
             }
         }
