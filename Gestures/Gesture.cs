@@ -6,8 +6,19 @@ using Microsoft.Kinect;
 
 namespace Gestures
 {
-    class Gesture
+    [Serializable()]
+    public class Gesture
     {
-        public List<Skeleton> skeletalData;
+        private List<Skeleton> skeletalData = new List<Skeleton>();
+        
+        public void addSkeletalData(Skeleton s)
+        {
+            this.skeletalData.Add(s);
+        }
+
+        public List<Skeleton> getSkeletalData()
+        {
+            return ExtensionMethods.DeepClone(this.skeletalData);
+        }
     }
 }

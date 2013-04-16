@@ -9,8 +9,9 @@ namespace Gestures
     {
         static KinectSensor kinect = null;
         public static Skeleton[] skeletonData;
-        public static List<Skeleton> skeleton;
+        public static Gesture gesture;
         public static bool record = false;
+        public static bool tracking = false;
 
         public static void StartKinectST()
         {
@@ -24,22 +25,37 @@ namespace Gestures
 
             skeletonData = new Skeleton[kinect.SkeletonStream.FrameSkeletonArrayLength]; // Allocate ST data
 
+            // enable returning skeletons while depth is in Near Range
+            kinect.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
+            kinect.SkeletonStream.EnableTrackingInNearRange = true;
+            kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
 
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             kinect.Start(); // Start Kinect sensor
         }
 
-        public static void startRecording()
+        public static void startRecording(float seconds)
         {
-            skeleton = new List<Skeleton>();
+            gesture = new Gesture();
+            //gesture.skeletalData = new List<Skeleton>();
+            System.Console.WriteLine("Please wait while skeleton is tracked.");
+            while (!tracking)
+            {
+                tracking = skeletonData.Any(s => s != null && s.TrackingState == SkeletonTrackingState.Tracked);
+            }
+            System.Console.WriteLine("Skeleton is now tracked.");
+            ExtensionMethods.countdown();
+            System.Console.WriteLine("Now Recording");
+            //ExtensionMethods.timer(seconds);
             record = true;
         }
 
-        public static List<Skeleton> stopRecording()
+        public static Gesture stopRecording()
         {
             record = false;
-            return ExtensionMethods.DeepClone(skeleton);
+            tracking = false;
+            return ExtensionMethods.DeepClone(gesture);
         }
 
         private static void kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
@@ -57,7 +73,7 @@ namespace Gestures
                         // Save only the tracked skeleton
                         if (s.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            skeleton.Add(s);
+                            gesture.addSkeletalData(s);
                             break;
                         }
                     }
