@@ -13,9 +13,14 @@ namespace Gestures
             System.Console.WriteLine("Hello!\n");
             KinectHelper.StartKinectST();
 
-            SecurityGestureSet sgs = new SecurityGestureSet();
-            sgs.record(2);
-            sgs.compare();
+            SecurityGestureSet gestureSet = new SecurityGestureSet();
+
+            gestureSet.record(2, 2);
+
+            if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
+            {
+                gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+            }
 
             System.Console.WriteLine("Press ENTER to close.");
             System.Console.ReadLine();

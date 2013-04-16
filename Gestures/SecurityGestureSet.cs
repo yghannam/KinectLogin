@@ -6,51 +6,69 @@ using Microsoft.Kinect;
 
 namespace Gestures
 {
-    class SecurityGestureSet
+    public class SecurityGestureSet
     {
-        Gesture g1 = new Gesture();
-        Gesture g2 = new Gesture();
+        private Gesture[] gestures;
+        private List<double> errors;
 
-        List<double> errors;
-       
-
-        
-
-        public void record(float seconds)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SecurityGestureSet()
         {
-            System.Console.Write("Press ENTER to start recording");
-            System.Console.ReadLine();
-          
-            System.Console.WriteLine("Recording 1");            
-            KinectHelper.startRecording(seconds);
-            ExtensionMethods.timer(seconds);
-            g1 = KinectHelper.stopRecording();
-            System.Console.WriteLine("Finished Recording 1\n");
-
-            //System.Console.Write("Press ENTER to continue");
-            //System.Console.ReadLine();
-
-           
-            System.Console.WriteLine("Recording 2");
-            KinectHelper.startRecording(seconds);
-            ExtensionMethods.timer(seconds);
-            g2 = KinectHelper.stopRecording();
-            System.Console.WriteLine("Finished Recording 2\n");
-
+            this.gestures = new Gesture[10];
+            this.errors = new List<double>();
         }
 
+        /// <summary>
+        /// Gets the gestures
+        /// </summary>
+        /// <returns>An array of gestures</returns>
+        public Gesture[] getGestures()
+        {
+            return this.gestures;
+        }
+       
+        /// <summary>
+        /// Records gestures
+        /// </summary>
+        /// <param name="numGestures">The number of gestures to record</param>
+        /// <param name="seconds">The length of each record in seconds</param>
+        public void record(int numGestures, float seconds)
+        {
+            for (int i = 1; i <= numGestures; i++)
+            {
+                System.Console.WriteLine("Recording " + i);
+                KinectHelper.startRecording(seconds);
+                ExtensionMethods.timer(seconds);
+                gestures[i - 1] = KinectHelper.stopRecording();
+                System.Console.WriteLine("Finished Recording " + i + "\n");
+            }
+        }
+        
+        /// <summary>
+        /// Computes the error between two 3D skeletal points p1 and p2
+        /// </summary>
+        /// <param name="p1">The first 3D skeletal point</param>
+        /// <param name="p2">The second 3D skeletal point</param>
+        /// <returns></returns>
         double error(SkeletonPoint p1, SkeletonPoint p2)
         {
             double error = Math.Abs(p1.X - p2.X) + Math.Abs(p1.Y - p2.Y) + Math.Abs(p1.Z - p2.Z);
             return error;
         }
 
-        public bool compare()//Gesture g1, Gesture g2)
+        /// <summary>
+        /// Compares two Gestures g1 and g2 and prints "No Match" if they are not similar enough for some threshold or "Match" if they are
+        /// </summary>
+        /// <param name="g1">The first Gesture to compare</param>
+        /// <param name="g2">The second Gesture to compare</param>
+        /// <returns>true if g1 and g2 are a match; false otherwise</returns>
+        public bool compare(Gesture g1, Gesture g2)
         {
             double threshold = 10.0;
             double sum = 0.0;
             bool diff = false;
-            errors = new List<double>();
 
             List<Skeleton> s1 = g1.getSkeletalData();
             List<Skeleton> s2 = g2.getSkeletalData();
