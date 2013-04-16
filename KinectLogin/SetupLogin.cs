@@ -23,20 +23,29 @@ namespace KinectLogin
         private void setupGestures_Click(object sender, EventArgs e)
         {
             int parsedNumGestures;
+            double parsedSeconds;
             if (Int32.TryParse(this.numGestures.Text, out parsedNumGestures) && parsedNumGestures >= 1 && parsedNumGestures <= 10)
             {
-                SecurityGestureSet gestureSet = new SecurityGestureSet();
-                gestureSet.record(parsedNumGestures, 2);
-
-                if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
+                if (Double.TryParse(this.gestureLength.Text, out parsedSeconds) && parsedSeconds >= 1.0 && parsedSeconds <= 10.0)
                 {
-                    gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+                    SecurityGestureSet gestureSet = new SecurityGestureSet();
+                    gestureSet.record(parsedNumGestures, (float)parsedSeconds);
+
+                    if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
+                    {
+                        gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+                    }
+                }
+                else
+                {
+                    // Show an error; could not parse gestureLength.Text
+                    MessageBox.Show("Could not use \"Seconds for Each Gesture\" field. Please verify this is an integer from 1 to 10.");
                 }
             }
             else
             {
                 // Show an error; could not parse numGestures.Text
-                MessageBox.Show("Could not use \"Number of Gestures\" field. Please verify this is an integer from 1 to 10.");
+                MessageBox.Show("Could not use \"Number of Security Gestures\" field. Please verify this is an integer from 1 to 10.");
             }
         }
 

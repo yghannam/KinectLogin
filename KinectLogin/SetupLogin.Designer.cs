@@ -34,6 +34,8 @@
             this.setupGestures = new System.Windows.Forms.Button();
             this.setupVocalCommand = new System.Windows.Forms.Button();
             this.setupFacialRecognition = new System.Windows.Forms.Button();
+            this.gestureLength = new System.Windows.Forms.TextBox();
+            this.gestureLengthLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // numGesturesLabel
@@ -51,12 +53,12 @@
             this.numGestures.Name = "numGestures";
             this.numGestures.Size = new System.Drawing.Size(33, 20);
             this.numGestures.TabIndex = 1;
-            this.numGestures.Text = "3";
+            this.numGestures.Text = "2";
             this.numGestures.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // setupGestures
             // 
-            this.setupGestures.Location = new System.Drawing.Point(37, 51);
+            this.setupGestures.Location = new System.Drawing.Point(37, 92);
             this.setupGestures.Name = "setupGestures";
             this.setupGestures.Size = new System.Drawing.Size(181, 23);
             this.setupGestures.TabIndex = 2;
@@ -66,7 +68,7 @@
             // 
             // setupVocalCommand
             // 
-            this.setupVocalCommand.Location = new System.Drawing.Point(37, 80);
+            this.setupVocalCommand.Location = new System.Drawing.Point(37, 121);
             this.setupVocalCommand.Name = "setupVocalCommand";
             this.setupVocalCommand.Size = new System.Drawing.Size(181, 23);
             this.setupVocalCommand.TabIndex = 3;
@@ -76,7 +78,7 @@
             // 
             // setupFacialRecognition
             // 
-            this.setupFacialRecognition.Location = new System.Drawing.Point(37, 110);
+            this.setupFacialRecognition.Location = new System.Drawing.Point(37, 151);
             this.setupFacialRecognition.Name = "setupFacialRecognition";
             this.setupFacialRecognition.Size = new System.Drawing.Size(181, 23);
             this.setupFacialRecognition.TabIndex = 4;
@@ -84,11 +86,31 @@
             this.setupFacialRecognition.UseVisualStyleBackColor = true;
             this.setupFacialRecognition.Click += new System.EventHandler(this.setupFacialRecognition_Click);
             // 
+            // gestureLength
+            // 
+            this.gestureLength.Location = new System.Drawing.Point(185, 55);
+            this.gestureLength.Name = "gestureLength";
+            this.gestureLength.Size = new System.Drawing.Size(33, 20);
+            this.gestureLength.TabIndex = 6;
+            this.gestureLength.Text = "3.0";
+            this.gestureLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // gestureLengthLabel
+            // 
+            this.gestureLengthLabel.AutoSize = true;
+            this.gestureLengthLabel.Location = new System.Drawing.Point(34, 58);
+            this.gestureLengthLabel.Name = "gestureLengthLabel";
+            this.gestureLengthLabel.Size = new System.Drawing.Size(135, 13);
+            this.gestureLengthLabel.TabIndex = 5;
+            this.gestureLengthLabel.Text = "Seconds for Each Gesture:";
+            // 
             // SetupLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(266, 160);
+            this.ClientSize = new System.Drawing.Size(266, 192);
+            this.Controls.Add(this.gestureLength);
+            this.Controls.Add(this.gestureLengthLabel);
             this.Controls.Add(this.setupFacialRecognition);
             this.Controls.Add(this.setupVocalCommand);
             this.Controls.Add(this.setupGestures);
@@ -109,6 +131,8 @@
         private System.Windows.Forms.Button setupGestures;
         private System.Windows.Forms.Button setupVocalCommand;
         private System.Windows.Forms.Button setupFacialRecognition;
+        private System.Windows.Forms.TextBox gestureLength;
+        private System.Windows.Forms.Label gestureLengthLabel;
     }
 }
 
