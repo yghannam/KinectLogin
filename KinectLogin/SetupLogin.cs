@@ -51,7 +51,7 @@ namespace KinectLogin
 
         private void setupVocalCommand_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("HELLO!");
         }
 
         private void setupFacialRecognition_Click(object sender, EventArgs e)
