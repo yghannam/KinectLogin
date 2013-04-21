@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Speech.AudioFormat;
-using System.Speech.Recognition;
 using System.Text;
 using System.Threading;
 using Microsoft.Kinect;
+using Microsoft.Speech.AudioFormat;
+using Microsoft.Speech.Recognition;
 
 namespace Gestures
 {
@@ -51,11 +51,28 @@ namespace Gestures
             if (ri != null)
             {
                 speechEngine = new SpeechRecognitionEngine(ri.Id);
+
+                var choices = new Choices();
+                choices.Add(new SemanticResultValue("zero", "ZERO"));
+                choices.Add(new SemanticResultValue("one", "ONE"));
+                choices.Add(new SemanticResultValue("two", "TWO"));
+                choices.Add(new SemanticResultValue("three", "THREE"));
+                choices.Add(new SemanticResultValue("four", "FOUR"));
+                choices.Add(new SemanticResultValue("five", "FIVE"));
+                choices.Add(new SemanticResultValue("six", "SIX"));
+                choices.Add(new SemanticResultValue("seven", "SEVEN"));
+                choices.Add(new SemanticResultValue("eight", "EIGHT"));
+                choices.Add(new SemanticResultValue("nine", "NINE"));
+
+                var gb = new GrammarBuilder { Culture = ri.Culture };
+                gb.Append(choices);
+                var g = new Grammar(gb);
+                speechEngine.LoadGrammar(g);
             }
 
-            DictationGrammar defaultDictionGrammar = new DictationGrammar();
-            defaultDictionGrammar.Enabled = true;
-            speechEngine.LoadGrammar(defaultDictionGrammar);
+            //DictationGrammar defaultDictionGrammar = new DictationGrammar();
+            //defaultDictionGrammar.Enabled = true;
+            //speechEngine.LoadGrammar(defaultDictionGrammar);
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
             speechEngine.SetInputToAudioStream(audioStream, new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
@@ -69,9 +86,9 @@ namespace Gestures
             {
                 // System.Speech does not have a Recognizer for Kinect. Use generic Recognizer.
 
-                //string value;
-                //recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
-                if ("en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))// && "True".Equals(value, StringComparison.OrdinalIgnoreCase))
+                string value;
+                recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
+                if ("en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase) && "True".Equals(value, StringComparison.OrdinalIgnoreCase))
                 {
                     return recognizer;
                 }
@@ -88,11 +105,12 @@ namespace Gestures
         private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Speech utterance confidence below which we treat speech as if it hadn't been heard
-            const double ConfidenceThreshold = 0.0;
+            const double ConfidenceThreshold = 0.3;
 
             if (e.Result.Confidence >= ConfidenceThreshold)
             {
-                System.Console.ReadLine();
+                System.Console.WriteLine(e.Result.Semantics.Value.ToString());
+                //System.Console.ReadLine();
             }
 
         }
