@@ -16,8 +16,6 @@ namespace KinectLogin
         public SetupLogin()
         {
             InitializeComponent();
-
-            KinectHelper.StartKinectST();
         }
 
         private void setupGestures_Click(object sender, EventArgs e)
