@@ -51,7 +51,29 @@ namespace KinectLogin
 
         private void setupVocalCommand_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("HELLO!");
+            VoiceRecognition voiceRecognition = new VoiceRecognition();
+
+            for (int i = 1; i <= 2; i++)
+            {
+                MessageBox.Show("Click OK to record passphrase " + i.ToString());
+                voiceRecognition.record(true, i-1);
+                MessageBox.Show("Click OK to stop recording passphrase " + i.ToString());
+                voiceRecognition.record(false, i-1);
+
+                if (voiceRecognition.isValid(i-1))
+                    MessageBox.Show("Finished recording passphrase  " + i.ToString());
+                else
+                {
+                    MessageBox.Show("Phrase " + i.ToString() + " was not between 4 and 8 values. Please try again.");
+                    i--;
+                }
+            }
+
+            bool match = voiceRecognition.compare(voiceRecognition.getVoices()[0], voiceRecognition.getVoices()[1]);
+            if (match)
+                MessageBox.Show("Phrases match");
+            else
+                MessageBox.Show("Phrases do not match.");
         }
 
         private void setupFacialRecognition_Click(object sender, EventArgs e)

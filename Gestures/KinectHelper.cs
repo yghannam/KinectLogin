@@ -14,12 +14,12 @@ namespace Gestures
     {
         static KinectSensor kinect = null;
         public static Skeleton[] skeletonData;
-        public static Stream audioStream;
-        //private static Thread audioRecordingThread;
         private static SpeechRecognitionEngine speechEngine;
         public static Gesture gesture;
+        public static Voice voice;
         public static bool record = false;
         public static bool tracking = false;
+        public static bool voiceRecord = false;
 
         public static void StartKinectST()
         {
@@ -43,8 +43,6 @@ namespace Gestures
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             kinect.Start(); // Start Kinect sensor
-
-            audioStream = kinect.AudioSource.Start(); // Create an audio stream
 
             // Find recognizer and initialize new speech engine with it.
             RecognizerInfo ri = GetKinectRecognizer();
@@ -70,12 +68,11 @@ namespace Gestures
                 speechEngine.LoadGrammar(g);
             }
 
-            //DictationGrammar defaultDictionGrammar = new DictationGrammar();
-            //defaultDictionGrammar.Enabled = true;
-            //speechEngine.LoadGrammar(defaultDictionGrammar);
+           
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
-            speechEngine.SetInputToAudioStream(audioStream, new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
+            speechEngine.SetInputToAudioStream(kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
+            speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
             speechEngine.RecognizeAsync(RecognizeMode.Multiple);
 
         }
@@ -107,10 +104,9 @@ namespace Gestures
             // Speech utterance confidence below which we treat speech as if it hadn't been heard
             const double ConfidenceThreshold = 0.3;
 
-            if (e.Result.Confidence >= ConfidenceThreshold)
+            if (voiceRecord && e.Result.Confidence >= ConfidenceThreshold)
             {
-                System.Console.WriteLine(e.Result.Semantics.Value.ToString());
-                //System.Console.ReadLine();
+                voice.addVoiceData(e.Result.Semantics.Value.ToString());
             }
 
         }
@@ -125,22 +121,17 @@ namespace Gestures
             System.Console.WriteLine("Speech not recognized.");
         }
 
-        public static void startRecording(float seconds)
+        public static void startRecording()
         {
             gesture = new Gesture();
-            //gesture.skeletalData = new List<Skeleton>();
             System.Console.WriteLine("Please wait while skeleton is tracked.");
-            //while (!tracking)
-            //{
-            //    tracking = skeletonData.Any(s => s != null && s.TrackingState == SkeletonTrackingState.Tracked);
-            //}
+            while (!tracking)
+            {
+                tracking = skeletonData.Any(s => s != null && s.TrackingState == SkeletonTrackingState.Tracked);
+            }
             System.Console.WriteLine("Skeleton is now tracked.");
             ExtensionMethods.countdown();
             System.Console.WriteLine("Now Recording");
-            //ExtensionMethods.timer(seconds);
-            //audioRecordingThread = new Thread(AudioRecordingThread);
-            //audioRecordingThread.Name = "Audio Recording Thread";
-            //audioRecordingThread.Start();
             record = true;
         }
 
@@ -149,23 +140,22 @@ namespace Gestures
             record = false;
             tracking = false;
 
-            //if (audioRecordingThread != null)
-            //{
-            //    audioRecordingThread.Join();
-            //}
-
             return ExtensionMethods.DeepClone(gesture);
         }
 
-        //private static void AudioRecordingThread()
-        //{
+        public static void startVoiceRecording()
+        {
+            voice = new Voice();
+            System.Console.WriteLine("Now Recording Voice");
+            voiceRecord = true;
+        }
 
-        //    while (record)
-        //    {
-        //        audioStream.Read(gesture.audioBuffer, 0, gesture.audioBuffer.Length);
-        //    }
-        //}
-
+        public static Voice stopVoiceRecording()
+        {
+            voiceRecord = false;
+            return ExtensionMethods.DeepClone(voice);
+        }
+       
         private static void kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame()) // Open the Skeleton frame

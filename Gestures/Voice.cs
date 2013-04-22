@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace Gestures
 {
-    class Voice
+    [Serializable()]
+    public class Voice
     {
+
+        private List<String> voiceData = new List<String>();
+
+        public void addVoiceData(String s)
+        {
+            this.voiceData.Add(s);
+        }
+
+        public List<String> getVoiceData()
+        {
+            return ExtensionMethods.DeepClone(this.voiceData);
+        }
     }
 }
