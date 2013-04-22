@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gestures;
@@ -13,6 +14,9 @@ namespace KinectLogin
 {
     public partial class SetupLogin : Form
     {
+        int parsedNumGestures;
+        double parsedSeconds;
+
         public SetupLogin()
         {
             InitializeComponent();
@@ -20,21 +24,26 @@ namespace KinectLogin
             KinectHelper.StartKinectST();
         }
 
+        private void gestureMethods()
+        {
+            SecurityGestureSet gestureSet = new SecurityGestureSet();
+            gestureSet.record(parsedNumGestures, (float)parsedSeconds);
+
+            if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
+            {
+                gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+            }
+        }
+
         private void setupGestures_Click(object sender, EventArgs e)
         {
-            int parsedNumGestures;
-            double parsedSeconds;
+            
             if (Int32.TryParse(this.numGestures.Text, out parsedNumGestures) && parsedNumGestures >= 1 && parsedNumGestures <= 10)
             {
                 if (Double.TryParse(this.gestureLength.Text, out parsedSeconds) && parsedSeconds >= 1.0 && parsedSeconds <= 10.0)
                 {
-                    SecurityGestureSet gestureSet = new SecurityGestureSet();
-                    gestureSet.record(parsedNumGestures, (float)parsedSeconds);
-
-                    if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
-                    {
-                        gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
-                    }
+                    Thread gestureThread = new Thread(new ThreadStart(gestureMethods));
+                    gestureThread.Start();
                 }
                 else
                 {
