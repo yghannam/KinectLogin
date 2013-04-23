@@ -21,6 +21,7 @@ namespace KinectLoginWpf
     /// </summary>
     public partial class SetupLogin : Window
     {
+        Login login;
         int parsedNumGestures;
         double parsedSeconds;
 
@@ -88,12 +89,12 @@ namespace KinectLoginWpf
                 }
 
                 // Start the recording
-                voiceRecognition.record(true, i - 1);
+                voiceRecognition.record(true, i - 1, KinectManager.UpdateVoiceData);
 
                 MessageBox.Show("Click \"OK\" to stop recording.", "Recording ...");
 
                 // Stop the recording
-                voiceRecognition.record(false, i - 1);
+                voiceRecognition.record(false, i - 1, KinectManager.UpdateVoiceData);
 
                 if (voiceRecognition.isValid(i - 1))
                 {
@@ -109,7 +110,9 @@ namespace KinectLoginWpf
             bool match = voiceRecognition.compare(voiceRecognition.getVoices()[0], voiceRecognition.getVoices()[1]);
             if (match)
             {
-                MessageBox.Show("Voice passwords match.");
+                KinectManager.saveVoicePassword(voiceRecognition.getVoices()[0].DeepClone());
+
+                MessageBox.Show("Voice passwords match and the password has been saved.");
 
                 // Success: Make the button green
                 this.setupVoiceRecognition.Foreground = Brushes.Green;
@@ -124,7 +127,7 @@ namespace KinectLoginWpf
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
             // Open the login window
-            Login login = new Login();
+            login = new Login();
             login.Show();
 
             // Close the settings window

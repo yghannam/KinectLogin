@@ -12,9 +12,16 @@ namespace Gestures
 
         private List<String> voiceData = new List<String>();
 
+        public event EventHandler VoiceDataUpdated;
+
         public void addVoiceData(String s)
         {
             this.voiceData.Add(s);
+
+            if (this.VoiceDataUpdated != null)
+            {
+                this.VoiceDataUpdated(this, new EventArgs());
+            }
         }
 
         public List<String> getVoiceData()

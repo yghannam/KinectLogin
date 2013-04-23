@@ -32,12 +32,17 @@ namespace Gestures
             return voices[v].getVoiceData().Count >= 4 && voices[v].getVoiceData().Count <= 8;
         }
 
-        public void record(bool startRecording, int v)
+        public void record(bool startRecording, int v, EventHandler VoiceDataUpdatedEvent)
         {
             if (startRecording)
+            {
                 KinectHelper.startVoiceRecording();
+            }
             else
+            {
                 voices[v] = KinectHelper.stopVoiceRecording();
+                voices[v].VoiceDataUpdated += VoiceDataUpdatedEvent;
+            }
         }
 
         public bool compare(Voice v1, Voice v2)
