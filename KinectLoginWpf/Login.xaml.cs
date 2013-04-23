@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Gestures;
 
 namespace KinectLoginWpf
 {
@@ -21,21 +20,24 @@ namespace KinectLoginWpf
     /// </summary>
     public partial class Login : Window
     {
-        KinectHelper helper;
-
         public Login()
         {
             InitializeComponent();
 
-            helper = new KinectHelper();
-            helper.StartKinectST();
-
-            helper.DepthImageUpdated += helper_DepthImageUpdated;
+            KinectManager.getKinectHelper().DepthImageUpdated += helper_DepthImageUpdated;
         }
 
         private void helper_DepthImageUpdated(object sender, EventArgs e)
         {
-            this.depthImage.Source = helper.outputBitmap;
+            this.depthImage.Source = KinectManager.getKinectHelper().outputBitmap;
+
+            // TO-DO Add this for the login
+            /*
+            if (gestureSet.getGestures() != null && gestureSet.getGestures().Length >= 2)
+            {
+                gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+            }
+            */
         }
     }
 }
