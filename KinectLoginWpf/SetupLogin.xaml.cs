@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Gestures;
 
 namespace KinectLoginWpf
 {
@@ -82,7 +83,7 @@ namespace KinectLoginWpf
                 }
                 else if (i == 2)
                 {
-                    MessageBox.Show("Click \"OK\" to start the confirmation recording your voice password. This recording must match: " + voiceRecognition.getVoices()[0],
+                    MessageBox.Show("Click \"OK\" to start the confirmation recording your voice password. This recording must match: " + voiceRecognition.getVoices()[0].ToString(),
                         "Begin Confirmation Recording");
                 }
 

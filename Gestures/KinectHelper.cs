@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Kinect;
+using Microsoft.Speech.AudioFormat;
+using Microsoft.Speech.Recognition;
 
 namespace Gestures
 {
@@ -18,9 +20,13 @@ namespace Gestures
     {
         public static KinectSensor kinect = null;
         public static Skeleton[] skeletonData;
+        private static SpeechRecognitionEngine speechEngine;
         public static Gesture gesture;
+        public static Voice voice;
         public static bool record = false;
         public static bool tracking = false;
+		
+		public static bool voiceRecord = false;
         
         // Depth image fields
         private static readonly int Bgr32BytesPerPixel = (PixelFormats.Bgr32.BitsPerPixel + 7) / 8;
@@ -42,6 +48,8 @@ namespace Gestures
         
         public void StartKinectST()
         {
+            //IReadOnlyCollection<RecognizerInfo> ris = SpeechRecognitionEngine.InstalledRecognizers();
+
             kinect = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected); // Get first Kinect Sensor
             if (kinect == null)
             {
@@ -62,12 +70,87 @@ namespace Gestures
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             kinect.Start(); // Start Kinect sensor
+
+            // Find recognizer and initialize new speech engine with it.
+            RecognizerInfo ri = GetKinectRecognizer();
+            if (ri != null)
+            {
+                speechEngine = new SpeechRecognitionEngine(ri.Id);
+
+                var choices = new Choices();
+                choices.Add(new SemanticResultValue("zero", "ZERO"));
+                choices.Add(new SemanticResultValue("one", "ONE"));
+                choices.Add(new SemanticResultValue("two", "TWO"));
+                choices.Add(new SemanticResultValue("three", "THREE"));
+                choices.Add(new SemanticResultValue("four", "FOUR"));
+                choices.Add(new SemanticResultValue("five", "FIVE"));
+                choices.Add(new SemanticResultValue("six", "SIX"));
+                choices.Add(new SemanticResultValue("seven", "SEVEN"));
+                choices.Add(new SemanticResultValue("eight", "EIGHT"));
+                choices.Add(new SemanticResultValue("nine", "NINE"));
+
+                var gb = new GrammarBuilder { Culture = ri.Culture };
+                gb.Append(choices);
+                var g = new Grammar(gb);
+                speechEngine.LoadGrammar(g);
+            }
+
+           
+            speechEngine.SpeechRecognized += SpeechRecognized;
+            speechEngine.SpeechRecognitionRejected += SpeechRejected;
+            speechEngine.SetInputToAudioStream(kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
+            speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
+            speechEngine.RecognizeAsync(RecognizeMode.Multiple);
+
         }
 
-        public static void startRecording(float seconds)
+        private static RecognizerInfo GetKinectRecognizer()
+        {
+            foreach (RecognizerInfo recognizer in SpeechRecognitionEngine.InstalledRecognizers())
+            {
+                // System.Speech does not have a Recognizer for Kinect. Use generic Recognizer.
+
+                string value;
+                recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
+                if ("en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase) && "True".Equals(value, StringComparison.OrdinalIgnoreCase))
+                {
+                    return recognizer;
+                }
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Handler for recognized speech events.
+        /// </summary>
+        /// <param name="sender">object sending the event.</param>
+        /// <param name="e">event arguments.</param>
+        private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            // Speech utterance confidence below which we treat speech as if it hadn't been heard
+            const double ConfidenceThreshold = 0.3;
+
+            if (voiceRecord && e.Result.Confidence >= ConfidenceThreshold)
+            {
+                voice.addVoiceData(e.Result.Semantics.Value.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// Handler for rejected speech events.
+        /// </summary>
+        /// <param name="sender">object sending the event.</param>
+        /// <param name="e">event arguments.</param>
+        private static void SpeechRejected(object sender, SpeechRecognitionRejectedEventArgs e)
+        {
+            System.Console.WriteLine("Speech not recognized.");
+        }
+
+        public static void startRecording()
         {
             gesture = new Gesture();
-            //gesture.skeletalData = new List<Skeleton>();
             System.Console.WriteLine("Please wait while skeleton is tracked.");
             while (!tracking)
             {
@@ -76,7 +159,6 @@ namespace Gestures
             System.Console.WriteLine("Skeleton is now tracked.");
             ExtensionMethods.countdown();
             System.Console.WriteLine("Now Recording");
-            //ExtensionMethods.timer(seconds);
             record = true;
         }
 
@@ -84,10 +166,24 @@ namespace Gestures
         {
             record = false;
             tracking = false;
+
             return ExtensionMethods.DeepClone(gesture);
         }
 
-        private void kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        public static void startVoiceRecording()
+        {
+            voice = new Voice();
+            System.Console.WriteLine("Now Recording Voice");
+            voiceRecord = true;
+        }
+
+        public static Voice stopVoiceRecording()
+        {
+            voiceRecord = false;
+            return ExtensionMethods.DeepClone(voice);
+        }
+       
+        private static void kinect_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame()) // Open the Skeleton frame
             {

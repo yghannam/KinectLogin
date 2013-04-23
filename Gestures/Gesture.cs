@@ -9,6 +9,7 @@ namespace Gestures
     [Serializable()]
     public class Gesture
     {
+        
         private List<Skeleton> skeletalData = new List<Skeleton>();
         
         public void addSkeletalData(Skeleton s)
