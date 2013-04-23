@@ -71,9 +71,53 @@ namespace KinectLoginWpf
 
         private void setupVoiceRecognition_Click(object sender, RoutedEventArgs e)
         {
-            // Success: Make the button green
-            this.setupVoiceRecognition.Foreground = Brushes.Green;
-            this.setupVoiceRecognition.FontWeight = FontWeights.Bold;
+            VoiceRecognition voiceRecognition = new VoiceRecognition();
+
+            for (int i = 1; i <= 2; i++)
+            {
+                if (i == 1)
+                {
+                    MessageBox.Show("Click \"OK\" to start the recording your voice password. Voice passwords must be between 4 to 8 digits and must match each other.",
+                        "Begin Recording");
+                }
+                else if (i == 2)
+                {
+                    MessageBox.Show("Click \"OK\" to start the confirmation recording your voice password. This recording must match: " + voiceRecognition.getVoices()[0],
+                        "Begin Confirmation Recording");
+                }
+
+                // Start the recording
+                voiceRecognition.record(true, i - 1);
+
+                MessageBox.Show("Click \"OK\" to stop recording.", "Recording ...");
+
+                // Stop the recording
+                voiceRecognition.record(false, i - 1);
+
+                if (voiceRecognition.isValid(i - 1))
+                {
+                    MessageBox.Show("Finished recording passphrase " + i.ToString());
+                }
+                else
+                {
+                    MessageBox.Show("Voice password " + i.ToString() + " did not contain between 4 to 8 digits. Please try again.");
+                    i--;
+                }
+            }
+
+            bool match = voiceRecognition.compare(voiceRecognition.getVoices()[0], voiceRecognition.getVoices()[1]);
+            if (match)
+            {
+                MessageBox.Show("Voice passwords match.");
+
+                // Success: Make the button green
+                this.setupVoiceRecognition.Foreground = Brushes.Green;
+                this.setupVoiceRecognition.FontWeight = FontWeights.Bold;
+            }
+            else
+            {
+                MessageBox.Show("Voice passwords do not match. Please try again.");
+            }
         }
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
