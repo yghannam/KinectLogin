@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KinectLogin.Properties
+namespace KinectLoginWpf.Properties
 {
 
 

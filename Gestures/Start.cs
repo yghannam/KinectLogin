@@ -11,7 +11,8 @@ namespace Gestures
         static void Main()
         {
             System.Console.WriteLine("Hello!\n");
-            KinectHelper.StartKinectST();
+            KinectHelper helper = new KinectHelper();
+            helper.StartKinectST();
 
             SecurityGestureSet gestureSet = new SecurityGestureSet();
 

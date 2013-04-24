@@ -39,9 +39,10 @@ namespace Gestures
             for (int i = 1; i <= numGestures; i++)
             {
                 System.Console.WriteLine("Recording " + i);
-                KinectHelper.startRecording(seconds);
+                KinectHelper.startRecording();
                 ExtensionMethods.timer(seconds);
                 gestures[i - 1] = KinectHelper.stopRecording();
+                gestures[i - 1].extractGestures();
                 System.Console.WriteLine("Finished Recording " + i + "\n");
             }
         }
