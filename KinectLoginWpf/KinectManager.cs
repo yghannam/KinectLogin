@@ -81,6 +81,7 @@ namespace KinectLoginWpf
         public static void recordGestures(int numGestures, float numSeconds)
         {
             gestureSet.record(numGestures, numSeconds);
+            gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
         }
 
         public static void saveVoicePassword(Voice voice)

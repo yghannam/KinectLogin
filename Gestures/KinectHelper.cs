@@ -63,8 +63,8 @@ namespace Gestures
 
             // enable returning skeletons while depth is in Near Range
             //kinect.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
-            kinect.SkeletonStream.EnableTrackingInNearRange = true;
-            kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
+            //kinect.SkeletonStream.EnableTrackingInNearRange = true;
+            //kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
 
             kinect.DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(kinect_DepthFrameReady); // Get Ready for Skeleton Ready Events
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
