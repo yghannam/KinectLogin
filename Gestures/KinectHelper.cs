@@ -71,6 +71,12 @@ namespace Gestures
 
             kinect.Start(); // Start Kinect sensor
 
+            
+
+        }
+
+        public static void StartSpeechEngine()
+        {
             // Find recognizer and initialize new speech engine with it.
             RecognizerInfo ri = GetKinectRecognizer();
             if (ri != null)
@@ -95,13 +101,12 @@ namespace Gestures
                 speechEngine.LoadGrammar(g);
             }
 
-           
+
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
             speechEngine.SetInputToAudioStream(kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
             speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
             speechEngine.RecognizeAsync(RecognizeMode.Multiple);
-
         }
 
         private static RecognizerInfo GetKinectRecognizer()
