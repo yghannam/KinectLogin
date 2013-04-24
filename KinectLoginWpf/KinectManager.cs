@@ -127,5 +127,14 @@ namespace KinectLoginWpf
         {
             face = new Face(faceModel);
         }
+
+        /// <summary>
+        /// Compares the current face with the faceModelCandidate
+        /// </summary>
+        /// <param name="faceModelCandidate"></param>
+        public static bool CompareFaces(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModelCandidate)
+        {
+            return face.compare(faceModelCandidate);
+        }
     }
 }

@@ -126,7 +126,11 @@
             {
                 KinectManager.SaveFace(faceTrackingViewer.getFaceModel());
 
-                MessageBox.Show("Face was saved.");
+                Thread.Sleep(4000);
+
+                bool matched = KinectManager.CompareFaces(faceTrackingViewer.getFaceModel());
+
+                MessageBox.Show("Face was saved. Match:" + matched);
 
                 this.Close();
 
