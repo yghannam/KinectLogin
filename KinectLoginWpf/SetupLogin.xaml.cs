@@ -29,7 +29,7 @@ namespace KinectLoginWpf
         {
             InitializeComponent();
 
-            KinectManager.setup();
+            //KinectManager.setup();
         }
 
         private void recordGestures()
@@ -39,6 +39,12 @@ namespace KinectLoginWpf
 
         private void setupFacialRecognition_Click(object sender, RoutedEventArgs e)
         {
+            // Show the FacialRecognitionWindow
+            FacialRecognitionWindow facialRecognitionWindow = new FacialRecognitionWindow();
+            facialRecognitionWindow.ShowDialog();
+
+            this.setupFacialRecognition.IsEnabled = false;
+
             // Success: Make the button green
             this.setupFacialRecognition.Foreground = Brushes.Green;
             this.setupFacialRecognition.FontWeight = FontWeights.Bold;

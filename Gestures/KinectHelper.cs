@@ -19,6 +19,12 @@ namespace Gestures
     public class KinectHelper
     {
         public static KinectSensor kinect = null;
+
+        public static KinectSensor getKinectSensor()
+        {
+            return kinect;
+        }
+
         public static Skeleton[] skeletonData;
         private static SpeechRecognitionEngine speechEngine;
         public static Gesture gesture;

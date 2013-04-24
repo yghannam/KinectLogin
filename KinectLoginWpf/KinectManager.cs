@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gestures;
+using Microsoft.Kinect.Toolkit.FaceTracking;
 
 namespace KinectLoginWpf
 {
     public static class KinectManager
     {
+        private static Face face;
+
         private static KinectHelper helper;
         private static SecurityGestureSet gestureSet;
 
@@ -118,6 +121,11 @@ namespace KinectLoginWpf
                     }
                 }
             }
+        }
+
+        public static void SaveFace(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModel)
+        {
+            face = new Face(faceModel);
         }
     }
 }
