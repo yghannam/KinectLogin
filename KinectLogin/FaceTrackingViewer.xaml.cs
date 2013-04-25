@@ -205,6 +205,12 @@ namespace KinectLogin
             if (newSensor != null)
             {
                 newSensor.AllFramesReady += this.OnAllFramesReady;
+
+                if (oldSensor == null)
+                {
+                    // Add the rest of the events in KinectHelper
+                    KinectManager.getKinectHelper().StartKinectST(newSensor);
+                }
             }
         }
 

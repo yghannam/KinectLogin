@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:KinectLogin"
         Title="Record Facial Model"
         Closed="WindowClosed"
-        Height="735" Width="770" 
+        Height="760.5" Width="770" 
         >
 
     <Window.Resources>
@@ -17,9 +17,10 @@
         </Style>
     </Window.Resources>
 
-    <Grid Name="MainGrid" Width="640" Height="480" Margin="0,90,0,0">
-        <Label Content="Status:" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" Margin="222,-139,338,0" VerticalAlignment="Top" FontSize="18"/>
-        <TextBlock x:Name="faceStatus" HorizontalAlignment="Center" Margin="307,-134,9,0" TextWrapping="Wrap" Text="Scanning..." VerticalAlignment="Top" FontSize="18" Width="324"/>
+    <Grid Name="MainGrid" Width="640" Height="480" Margin="0,110,0,0">
+        <TextBlock x:Name="welcomeMessage" TextAlignment="Center" HorizontalAlignment="Stretch" Margin="0,-170,0,0" TextWrapping="Wrap" Text="Welcome. Please start by recording your face." VerticalAlignment="Top" FontSize="18" Width="380"/>
+        <Label Content="Status:" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" Margin="135,-138,439,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBlock x:Name="faceStatus" HorizontalAlignment="Center" Margin="206,-133,130,0" TextWrapping="Wrap" Text="Scanning..." VerticalAlignment="Top" FontSize="18" Width="304"/>
 
         <Button Content="Record 3D Face Model" HorizontalAlignment="Stretch" Margin="0,-90,0,0" VerticalAlignment="Top" Width="150" Click="Save_Click"/>
 
@@ -27,5 +28,8 @@
 
         <Image Name="ColorImage"/>
         <local:FaceTrackingViewer x:Name="faceTrackingViewer" />
+
+        <Button x:Name="continueButton" Content="Continue" HorizontalAlignment="Stretch" Margin="0,507,0,-58" VerticalAlignment="Top" Width="74" Click="Finish_Click" IsEnabled="False"/>
     </Grid>
+
 </Window>

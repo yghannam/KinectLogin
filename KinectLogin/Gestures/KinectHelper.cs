@@ -52,17 +52,16 @@ namespace KinectLogin
         public event EventHandler DepthImageUpdated;
         public WriteableBitmap outputBitmap;
         
-        public void StartKinectST()
+        public void StartKinectST(KinectSensor kinectRef)
         {
-            //IReadOnlyCollection<RecognizerInfo> ris = SpeechRecognitionEngine.InstalledRecognizers();
+            kinect = kinectRef;
 
-            kinect = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected); // Get first Kinect Sensor
             if (kinect == null)
             {
                 System.Console.WriteLine("Kinect not detected.");
                 System.Environment.Exit(0);
             }
-            kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30); // Enable the depth stream
+            //kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30); // Enable the depth stream
             kinect.SkeletonStream.Enable(); // Enable skeletal tracking
 
             skeletonData = new Skeleton[kinect.SkeletonStream.FrameSkeletonArrayLength]; // Allocate ST data
@@ -75,7 +74,7 @@ namespace KinectLogin
             kinect.DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(kinect_DepthFrameReady); // Get Ready for Skeleton Ready Events
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
-            kinect.Start(); // Start Kinect sensor
+            //kinect.Start(); // Start Kinect sensor
 
             
 

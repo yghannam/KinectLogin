@@ -23,12 +23,15 @@ namespace KinectLogin
         Login login;
         int parsedNumGestures;
         double parsedSeconds;
+        FacialRecognitionWindow facialRecognitionWindow;
 
         public SetupLogin()
         {
             InitializeComponent();
 
             KinectManager.setup();
+
+            showFacialRecognitionWindow();
         }
 
         private void recordGestures()
@@ -36,10 +39,10 @@ namespace KinectLogin
             KinectManager.recordGestures(parsedNumGestures, (float)parsedSeconds);
         }
 
-        private void setupFacialRecognition_Click(object sender, RoutedEventArgs e)
+        private void showFacialRecognitionWindow()
         {
             // Show the FacialRecognitionWindow
-            FacialRecognitionWindow facialRecognitionWindow = new FacialRecognitionWindow();
+            facialRecognitionWindow = new FacialRecognitionWindow();
             facialRecognitionWindow.ShowDialog();
 
             this.setupFacialRecognition.IsEnabled = false;
@@ -47,6 +50,11 @@ namespace KinectLogin
             // Success: Make the button green
             this.setupFacialRecognition.Foreground = Brushes.Green;
             this.setupFacialRecognition.FontWeight = FontWeights.Bold;
+        }
+
+        private void setupFacialRecognition_Click(object sender, RoutedEventArgs e)
+        {
+            showFacialRecognitionWindow();
         }
 
         private void setupGestures_Click(object sender, RoutedEventArgs e)
@@ -133,6 +141,8 @@ namespace KinectLogin
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
+            facialRecognitionWindow.stopKinect();
+
             // Open the login window
             login = new Login();
             login.Show();
