@@ -22,7 +22,6 @@ namespace KinectLogin
             if (helper == null)
             {
                 helper = new KinectHelper();
-                helper.StartKinectST();
             }
 
             if (gestureSet == null)
@@ -40,7 +39,6 @@ namespace KinectLogin
             if (helper == null)
             {
                 helper = new KinectHelper();
-                helper.StartKinectST();
                 return helper;
             }
             else
@@ -122,9 +120,22 @@ namespace KinectLogin
             }
         }
 
+        /// <summary>
+        /// Creates a new face object with the provided faceModel
+        /// </summary>
+        /// <param name="faceModel"></param>
         public static void SaveFace(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModel)
         {
             face = new Face(faceModel);
+        }
+
+        /// <summary>
+        /// Gets the face
+        /// </summary>
+        /// <returns>The KinectManager's current face value</returns>
+        public static Face getFace()
+        {
+            return face;
         }
 
         /// <summary>
