@@ -78,7 +78,7 @@ namespace KinectLogin
         /// </summary>
         /// <param name="numGestures">The number of gestures to record</param>
         /// <param name="numSeconds">The number of seconds for each gesture</param>
-        public static void recordGestures(int numGestures, float numSeconds)
+        public static void recordGestures(int numGestures, int numSeconds)
         {
             gestureSet.record(numGestures, numSeconds);
         }

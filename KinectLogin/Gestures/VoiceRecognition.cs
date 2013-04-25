@@ -9,6 +9,7 @@ namespace KinectLogin
     public class VoiceRecognition
     {
         private Voice[] voices;
+        private bool authenticationStatus = false;
 
         /// <summary>
         /// Constructor
@@ -16,6 +17,8 @@ namespace KinectLogin
         public VoiceRecognition()
         {
             this.voices = new Voice[10];
+            //this.voices[0] = new Voice();
+            //this.voices[0].addVoiceData("TWO");
         }
 
         /// <summary>
@@ -27,9 +30,14 @@ namespace KinectLogin
             return this.voices;
         }
 
+        public bool getAuthenticationStatus()
+        {
+            return this.authenticationStatus;
+        }
+
         public bool isValid(int v)
         {
-            return voices[v].getVoiceData().Count >= 4 && voices[v].getVoiceData().Count <= 8;
+            return voices[v].getVoiceData().Count >= 1 && voices[v].getVoiceData().Count <= 8;
         }
 
         public void record(bool startRecording, int v, EventHandler VoiceDataUpdatedEvent)
@@ -59,6 +67,14 @@ namespace KinectLogin
                 }
             }
             return match;
+        }
+
+        public void Authenticate()
+        {
+            record(true, 2, KinectManager.UpdateVoiceData);
+            ExtensionMethods.timer(10);
+            record(false, 2, KinectManager.UpdateVoiceData);
+            authenticationStatus = compare(voices[0], voices[2]);
         }
     }
 }

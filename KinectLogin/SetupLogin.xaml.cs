@@ -22,7 +22,7 @@ namespace KinectLogin
     {
         Login login;
         int parsedNumGestures;
-        double parsedSeconds;
+        int parsedSeconds;
         FacialRecognitionWindow facialRecognitionWindow;
 
         public SetupLogin()
@@ -36,7 +36,7 @@ namespace KinectLogin
 
         private void recordGestures()
         {
-            KinectManager.recordGestures(parsedNumGestures, (float)parsedSeconds);
+            KinectManager.recordGestures(parsedNumGestures, parsedSeconds);
         }
 
         private void showFacialRecognitionWindow()
@@ -61,7 +61,7 @@ namespace KinectLogin
         {
             if (Int32.TryParse(this.numGestures.Text, out parsedNumGestures) && parsedNumGestures >= 1 && parsedNumGestures <= 10)
             {
-                if (Double.TryParse(this.gestureLength.Text, out parsedSeconds) && parsedSeconds >= 1.0 && parsedSeconds <= 10.0)
+                if (Int32.TryParse(this.gestureLength.Text, out parsedSeconds) && parsedSeconds >= 1 && parsedSeconds <= 10)
                 {
                     // Create a new thread for recording
                     Thread gestureRecordingThread = new Thread(new ThreadStart(recordGestures));
@@ -86,9 +86,9 @@ namespace KinectLogin
 
         private void setupVoiceRecognition_Click(object sender, RoutedEventArgs e)
         {
-            KinectHelper.StartSpeechEngine();
+            //KinectHelper.StartSpeechEngine();
 
-            VoiceRecognition voiceRecognition = new VoiceRecognition();
+            //VoiceRecognition voiceRecognition = new VoiceRecognition();
 
             for (int i = 1; i <= 2; i++)
             {
@@ -99,19 +99,19 @@ namespace KinectLogin
                 }
                 else if (i == 2)
                 {
-                    MessageBox.Show("Click \"OK\" to start the confirmation recording your voice password. This recording must match: " + voiceRecognition.getVoices()[0].ToString(),
+                    MessageBox.Show("Click \"OK\" to start the confirmation recording your voice password. This recording must match: " + KinectManager.getVoiceRecognition().getVoices()[0].ToString(),
                         "Begin Confirmation Recording");
                 }
 
                 // Start the recording
-                voiceRecognition.record(true, i - 1, KinectManager.UpdateVoiceData);
+                KinectManager.getVoiceRecognition().record(true, i - 1, KinectManager.UpdateVoiceData);
 
                 MessageBox.Show("Click \"OK\" to stop recording.", "Recording ...");
 
                 // Stop the recording
-                voiceRecognition.record(false, i - 1, KinectManager.UpdateVoiceData);
+                KinectManager.getVoiceRecognition().record(false, i - 1, KinectManager.UpdateVoiceData);
 
-                if (voiceRecognition.isValid(i - 1))
+                if (KinectManager.getVoiceRecognition().isValid(i - 1))
                 {
                     MessageBox.Show("Finished recording passphrase " + i.ToString());
                 }
@@ -122,10 +122,10 @@ namespace KinectLogin
                 }
             }
 
-            bool match = voiceRecognition.compare(voiceRecognition.getVoices()[0], voiceRecognition.getVoices()[1]);
+            bool match = KinectManager.getVoiceRecognition().compare(KinectManager.getVoiceRecognition().getVoices()[0], KinectManager.getVoiceRecognition().getVoices()[1]);
             if (match)
             {
-                KinectManager.saveVoicePassword(voiceRecognition.getVoices()[0].DeepClone());
+                KinectManager.saveVoicePassword(KinectManager.getVoiceRecognition().getVoices()[0].DeepClone());
 
                 MessageBox.Show("Voice passwords match and the password has been saved.");
 

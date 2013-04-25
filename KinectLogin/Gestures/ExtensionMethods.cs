@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using System.IO;
@@ -25,16 +25,17 @@ namespace KinectLogin
             }
         }
 
-        public static void timer(float seconds)
+        public static void timer(int seconds)
         {
-            DateTime startTime = DateTime.Now;
-            DateTime currentTime = DateTime.Now;
-            while (currentTime.Second - startTime.Second < seconds)
-            {
-                //if (currentTime.Second - startTime.Second % 1 == 0)
-                //    System.Console.WriteLine(currentTime.Second - startTime.Second);
-                currentTime = DateTime.Now;
-            }
+            Thread.Sleep(seconds * 1000);
+            //DateTime startTime = DateTime.Now;
+            //DateTime currentTime = DateTime.Now;
+            //while (currentTime.Second - startTime.Second < seconds)
+            //{
+            //    //if (currentTime.Second - startTime.Second % 1 == 0)
+            //    //    System.Console.WriteLine(currentTime.Second - startTime.Second);
+            //    currentTime = DateTime.Now;
+            //}
         }
 
        public static void countdown()

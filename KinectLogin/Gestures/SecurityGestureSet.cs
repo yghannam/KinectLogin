@@ -42,7 +42,7 @@ namespace KinectLogin
         /// </summary>
         /// <param name="numGestures">The number of gestures to record</param>
         /// <param name="seconds">The length of each record in seconds</param>
-        public void record(int numGestures, float seconds)
+        public void record(int numGestures, int seconds)
         {
             bool match = false;
             while (!match)
@@ -108,7 +108,7 @@ namespace KinectLogin
         {
             System.Console.WriteLine("Recording " + 3);
             KinectHelper.startRecording();
-            ExtensionMethods.timer(10.0f);
+            ExtensionMethods.timer(10);
             gestures[2] = KinectHelper.stopRecording();
             gestures[2].extractGestures();
             System.Console.WriteLine("Finished Recording " + 3 + "\n");

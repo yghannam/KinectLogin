@@ -71,12 +71,12 @@ namespace KinectLogin
             //kinect.SkeletonStream.EnableTrackingInNearRange = true;
             //kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
 
-            kinect.DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(kinect_DepthFrameReady); // Get Ready for Skeleton Ready Events
+            //kinect.DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(kinect_DepthFrameReady); // Get Ready for Skeleton Ready Events
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             //kinect.Start(); // Start Kinect sensor
 
-            
+            StartSpeechEngine();
 
         }
 
@@ -110,7 +110,7 @@ namespace KinectLogin
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
             speechEngine.SetInputToAudioStream(kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
-            speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
+            //speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
             speechEngine.RecognizeAsync(RecognizeMode.Multiple);
         }
 
@@ -190,6 +190,7 @@ namespace KinectLogin
         public static Voice stopVoiceRecording()
         {
             voiceRecord = false;
+            System.Console.WriteLine("Finished Recording Voice");
             return ExtensionMethods.DeepClone(voice);
         }
        
