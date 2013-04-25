@@ -31,23 +31,22 @@ namespace KinectLogin
             String gesture = null;
             foreach(Skeleton s in skeletalData)
             {
-                // Match right side templates
-                gesture = matchGestureTemplates(s, true);
-                if (gesture != null && (gesturePhrase.Count == 0 || gesturePhrase.Last().Equals(gesture) == false))
-                    gesturePhrase.Add(gesture);
-
-                // Match left side templates
-                gesture = matchGestureTemplates(s, false);
-                if (gesture != null && (gesturePhrase.Count == 0 || gesturePhrase.Last().Equals(gesture) == false))
-                    gesturePhrase.Add(gesture);
+                gesture = matchGestureTemplates(s);
+                if (gesture != null)
+                {
+                    //if (gesturePhrase.Count == 0)
+                        gesturePhrase.Add(gesture);
+                    //else if (!gesturePhrase.Last().Equals(gesture))
+                    //    gesturePhrase.Add(gesture);
+                }
             }
             return gesturePhrase.Count > 0;
         }
 
 
-        private String matchGestureTemplates(Skeleton s, bool rightSide)
+        private String matchGestureTemplates(Skeleton s)
         {
-            float threshold = 0.5f;
+            float threshold = 0.1f;
             String gesture = null;
 
             Joints joints = new Joints();
@@ -56,25 +55,57 @@ namespace KinectLogin
                 joints.addJoints(s.Joints.ElementAt(i), i);
             }
 
-            if (rightSide)
+            bool rightHandtoHead = Vector3.Dot(Vector3.Normalize(joints.HAND_RIGHT - joints.HEAD), Vector3.Right) > threshold;
+            bool rightForearm_vertical = Vector3.Dot(Vector3.Normalize(joints.HAND_RIGHT - joints.ELBOW_RIGHT), Vector3.Up) > threshold;
+            bool rightForearm_horizontal = Vector3.Dot(Vector3.Normalize(joints.HAND_RIGHT - joints.ELBOW_RIGHT), Vector3.Right) > threshold;
+            bool rightUpperarm_horizontal = Vector3.Dot(Vector3.Normalize(joints.ELBOW_RIGHT - joints.SHOULDER_RIGHT), Vector3.Right) > threshold;
+
+            bool leftHandtoHead = Vector3.Dot(Vector3.Normalize(joints.HAND_LEFT - joints.HEAD), Vector3.Left) > threshold;
+            bool leftForearm_vertical = Vector3.Dot(Vector3.Normalize(joints.HAND_LEFT - joints.ELBOW_LEFT), Vector3.Up) > threshold;
+            bool leftForearm_horizontal = Vector3.Dot(Vector3.Normalize(joints.HAND_LEFT - joints.ELBOW_LEFT), Vector3.Left) > threshold;
+            bool leftUpperarm_horizontal = Vector3.Dot(Vector3.Normalize(joints.ELBOW_LEFT - joints.SHOULDER_LEFT), Vector3.Left) > threshold;
+
+            // Elbow Right Angles
+            if (rightHandtoHead && rightForearm_vertical)
             {
-                if (Vector3.Dot(Vector3.Normalize(joints.HAND_RIGHT - joints.HEAD), Vector3.Right) > threshold
-                    && Vector3.Dot(Vector3.Normalize(joints.HAND_RIGHT - joints.ELBOW_RIGHT), Vector3.Up) > threshold)
+                if (leftHandtoHead && leftForearm_vertical)
+                {
+                    gesture = "ElbowRightAngle_Both";
+                    System.Console.WriteLine("ElbowRightAngle_Both");
+                }
+                else
                 {
                     gesture = "ElbowRightAngle_Right";
                     System.Console.WriteLine("ElbowRightAngle_Right");
                 }
             }
-
-            else
+            else if (leftHandtoHead && leftForearm_vertical)
             {
-                if (Vector3.Dot(Vector3.Normalize(joints.HAND_LEFT - joints.HEAD), Vector3.Left) > threshold
-                    && Vector3.Dot(Vector3.Normalize(joints.HAND_LEFT - joints.ELBOW_LEFT), Vector3.Up) > threshold)
+                gesture = "ElbowRightAngle_Left";
+                System.Console.WriteLine("ElbowRightAngle_Left");
+            }
+
+
+            // Straight Arms
+            else if (rightForearm_horizontal && rightUpperarm_horizontal)
+            {
+                if (leftForearm_horizontal && leftUpperarm_horizontal)
                 {
-                    gesture = "ElbowRightAngle_Left";
-                    System.Console.WriteLine("ElbowRightAngle_Left");
+                    gesture = "StraightArm_Both";
+                    System.Console.WriteLine("StraightArm_Both");
+                }
+                else
+                {
+                    gesture = "StraightArm_Right";
+                    System.Console.WriteLine("StraightArm_Right");
                 }
             }
+            else if (leftForearm_horizontal && leftUpperarm_horizontal)
+            {
+                gesture = "StraightArm_Left";
+                System.Console.WriteLine("StraightArm_Left");
+            }
+          
 
             return gesture;
 
@@ -179,12 +210,12 @@ namespace KinectLogin
             float y;
             float z;
 
-            public static Vector3 Up = new Vector3(0, 1, 0);
-            public static Vector3 Down = new Vector3(0, -1, 0);
-            public static Vector3 Right = new Vector3(1, 0, 0);
-            public static Vector3 Left = new Vector3(-1, 0, 0);
-            public static Vector3 Forward = new Vector3(0, 0, 1);
-            public static Vector3 Back = new Vector3(0, 0, -1);
+            public static Vector3 Up = new Vector3(0.0f, 1.0f, 0.0f);
+            public static Vector3 Down = new Vector3(0.0f, -1.0f, 0.0f);
+            public static Vector3 Right = new Vector3(1.0f, 0.0f, 0.0f);
+            public static Vector3 Left = new Vector3(-1.0f, 0.0f, 0.0f);
+            public static Vector3 Forward = new Vector3(0.0f, 0.0f, 1.0f);
+            public static Vector3 Back = new Vector3(0.0f, 0.0f, -1.0f);
 
             public Vector3(Joint j)
             {
