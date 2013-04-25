@@ -36,14 +36,21 @@ namespace KinectLogin
         /// <param name="seconds">The length of each record in seconds</param>
         public void record(int numGestures, float seconds)
         {
-            for (int i = 1; i <= numGestures; i++)
+            bool match = false;
+            while (!match)
             {
-                System.Console.WriteLine("Recording " + i);
-                KinectHelper.startRecording();
-                ExtensionMethods.timer(seconds);
-                gestures[i - 1] = KinectHelper.stopRecording();
-                gestures[i - 1].extractGestures();
-                System.Console.WriteLine("Finished Recording " + i + "\n");
+
+                for (int i = 1; i <= numGestures; i++)
+                {
+                    System.Console.WriteLine("Recording " + i);
+                    KinectHelper.startRecording();
+                    ExtensionMethods.timer(seconds);
+                    gestures[i - 1] = KinectHelper.stopRecording();
+                    gestures[i - 1].extractGestures();
+                    System.Console.WriteLine("Finished Recording " + i + "\n");
+                }
+
+                match = compare(gestures[0], gestures[1]);
             }
         }
         
@@ -67,38 +74,26 @@ namespace KinectLogin
         /// <returns>true if g1 and g2 are a match; false otherwise</returns>
         public bool compare(Gesture g1, Gesture g2)
         {
-            double threshold = 10.0;
-            double sum = 0.0;
-            bool diff = false;
+            bool match = false;
 
-            List<Skeleton> s1 = g1.getSkeletalData();
-            List<Skeleton> s2 = g2.getSkeletalData();
-            double[] jointErrors = new double[20];
+            List<String> p1 = g1.getGesturePhrase();
+            List<String> p2 = g2.getGesturePhrase();
 
-            for (int i = 0; i < Math.Min(s1.Count, s2.Count); i++)
+            if (p1.Count == p2.Count)
             {
-                for (int j = 0; j < 20; j++)
+                for (int i = 0; i < p1.Count; i++)
                 {
-                    SkeletonPoint p1 = s1[i].Joints.ElementAt(j).Position;
-                    SkeletonPoint p2 = s2[i].Joints.ElementAt(j).Position;
-                    double err = error(p1, p2);
-                    errors.Add(err);
-                    sum += err;
-                    jointErrors[j] += err;
-                    if (jointErrors[j] > threshold)
-                    {
-                        diff = true;
+                    match = p1.ElementAt(i).Equals(p2.ElementAt(i));
+                    if (!match)
                         break;
-                    }
-                    //if(g1[i].Joints.ElementAt(j).JointType == JointType.HandLeft || g1[i].Joints.ElementAt(j).JointType == JointType.HandRight)
-                    //    System.Console.WriteLine("{0}: ({1}, {2}, {3}) ({4}, {5}, {6}), {7}", g1[i].Joints.ElementAt(j).JointType, p1.X, p1.Y, p1.Z, p2.X, p2.Y, p2.Z, err);
                 }
             }
 
-            String a = diff ? "No " : "";
-            System.Console.WriteLine(a + "Match");
-            System.Console.WriteLine(sum);
-            return diff;
+            if (!match)
+                System.Console.WriteLine("Gestures do not match. Please try again.");
+            else
+                System.Console.WriteLine("Gestures match.");
+            return match;
         }
     }
 }

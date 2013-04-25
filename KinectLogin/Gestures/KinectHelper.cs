@@ -208,7 +208,7 @@ namespace KinectLogin
                         // Save only the tracked skeleton
                         if (s.TrackingState == SkeletonTrackingState.Tracked)
                         {
-                            gesture.addSkeletalData(s);
+                            gesture.addSkeletalData(ExtensionMethods.DeepClone(s));
                             break;
                         }
                     }

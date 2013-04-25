@@ -186,7 +186,7 @@ namespace KinectLogin
                 for (i = 0; i < KinectManager.getGestureSet().getGestures().Length; i++)
                 {
                     // TODO: Compare gestures
-                    //matched = gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+                    matched = KinectManager.getGestureSet().compare(KinectManager.getGestureSet().getGestures()[0], KinectManager.getGestureSet().getGestures()[1]);
                 }
 
                 if (matched)

@@ -23,6 +23,11 @@ namespace KinectLogin
             return ExtensionMethods.DeepClone(this.skeletalData);
         }
 
+        public List<String> getGesturePhrase()
+        {
+            return ExtensionMethods.DeepClone(this.gesturePhrase);
+        }
+
         // Loop through each skeleton and match to gesture template.
         // Add gesture to list of gestures if different than previous skeleton's gesture.
         // Return false if no valid gestures found.
@@ -32,12 +37,9 @@ namespace KinectLogin
             foreach(Skeleton s in skeletalData)
             {
                 gesture = matchGestureTemplates(s);
-                if (gesture != null)
-                {
-                    //if (gesturePhrase.Count == 0)
-                        gesturePhrase.Add(gesture);
-                    //else if (!gesturePhrase.Last().Equals(gesture))
-                    //    gesturePhrase.Add(gesture);
+                if (gesture != null && (gesturePhrase.Count == 0 || !gesturePhrase.Last().Equals(gesture)))
+                {                
+                    gesturePhrase.Add(gesture);
                 }
             }
             return gesturePhrase.Count > 0;
@@ -46,7 +48,7 @@ namespace KinectLogin
 
         private String matchGestureTemplates(Skeleton s)
         {
-            float threshold = 0.1f;
+            float threshold = 0.8f;
             String gesture = null;
 
             Joints joints = new Joints();
@@ -68,42 +70,42 @@ namespace KinectLogin
             // Elbow Right Angles
             if (rightHandtoHead && rightForearm_vertical)
             {
-                if (leftHandtoHead && leftForearm_vertical)
-                {
-                    gesture = "ElbowRightAngle_Both";
-                    System.Console.WriteLine("ElbowRightAngle_Both");
-                }
-                else
-                {
+                //if (leftHandtoHead && leftForearm_vertical)
+                //{
+                //    gesture = "ElbowRightAngle_Both";
+                //    //System.Console.WriteLine("ElbowRightAngle_Both");
+                //}
+                //else
+                //{
                     gesture = "ElbowRightAngle_Right";
-                    System.Console.WriteLine("ElbowRightAngle_Right");
-                }
+                    //System.Console.WriteLine("ElbowRightAngle_Right");
+                //}
             }
             else if (leftHandtoHead && leftForearm_vertical)
             {
                 gesture = "ElbowRightAngle_Left";
-                System.Console.WriteLine("ElbowRightAngle_Left");
+                //System.Console.WriteLine("ElbowRightAngle_Left");
             }
 
 
             // Straight Arms
             else if (rightForearm_horizontal && rightUpperarm_horizontal)
             {
-                if (leftForearm_horizontal && leftUpperarm_horizontal)
-                {
-                    gesture = "StraightArm_Both";
-                    System.Console.WriteLine("StraightArm_Both");
-                }
-                else
-                {
+                //if (leftForearm_horizontal && leftUpperarm_horizontal)
+                //{
+                //    gesture = "StraightArm_Both";
+                //    //System.Console.WriteLine("StraightArm_Both");
+                //}
+                //else
+                //{
                     gesture = "StraightArm_Right";
-                    System.Console.WriteLine("StraightArm_Right");
-                }
+                    //System.Console.WriteLine("StraightArm_Right");
+                //}
             }
             else if (leftForearm_horizontal && leftUpperarm_horizontal)
             {
                 gesture = "StraightArm_Left";
-                System.Console.WriteLine("StraightArm_Left");
+                //System.Console.WriteLine("StraightArm_Left");
             }
           
 
