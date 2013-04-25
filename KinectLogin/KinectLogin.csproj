@@ -7,8 +7,8 @@
     <ProjectGuid>{7EDED47C-78FC-4AE2-BE04-657AF2DD9031}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KinectLoginWpf</RootNamespace>
-    <AssemblyName>KinectLoginWpf</AssemblyName>
+    <RootNamespace>KinectLogin</RootNamespace>
+    <AssemblyName>KinectLogin</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>KinectLoginWpf.App</StartupObject>
+    <StartupObject>KinectLogin.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
@@ -79,6 +79,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\Program Files\Microsoft SDKs\Kinect\v1.7\Assemblies\Microsoft.Kinect.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Speech, Version=11.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft SDKs\Speech\v11.0\Assembly\Microsoft.Speech.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -105,6 +109,14 @@
     <Compile Include="FacialRecognitionWindow.xaml.cs">
       <DependentUpon>FacialRecognitionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Gestures\DepthColorizer.cs" />
+    <Compile Include="Gestures\ExtensionMethods.cs" />
+    <Compile Include="Gestures\Face.cs" />
+    <Compile Include="Gestures\Gesture.cs" />
+    <Compile Include="Gestures\KinectHelper.cs" />
+    <Compile Include="Gestures\SecurityGestureSet.cs" />
+    <Compile Include="Gestures\Voice.cs" />
+    <Compile Include="Gestures\VoiceRecognition.cs" />
     <Compile Include="SetupLogin.xaml.cs">
       <DependentUpon>SetupLogin.xaml</DependentUpon>
     </Compile>
@@ -183,10 +195,6 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gestures\Gestures.csproj">
-      <Project>{c7bfce14-3fc4-4b88-b261-40e867ed4293}</Project>
-      <Name>Gestures</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Microsoft.Kinect.Toolkit.FaceTracking\Microsoft.Kinect.Toolkit.FaceTracking.csproj">
       <Project>{1bcf9cee-df01-430e-b49d-41a9a88963eb}</Project>
       <Name>Microsoft.Kinect.Toolkit.FaceTracking</Name>

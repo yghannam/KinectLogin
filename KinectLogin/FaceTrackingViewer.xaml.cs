@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace KinectLoginWpf
+namespace KinectLogin
 {
     using System;
     using System.Collections.Generic;

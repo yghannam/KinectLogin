@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Gestures;
 using Microsoft.Kinect.Toolkit.FaceTracking;
 
-namespace KinectLoginWpf
+namespace KinectLogin
 {
     public static class KinectManager
     {

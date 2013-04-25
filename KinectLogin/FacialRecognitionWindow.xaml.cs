@@ -1,4 +1,4 @@
-﻿namespace KinectLoginWpf
+﻿namespace KinectLogin
 {
     using System;
     using System.Threading;
@@ -87,12 +87,8 @@
 
         private void WindowClosed(object sender, EventArgs e)
         {
-            sensorChooser.Stop();
-            faceTrackingViewer.Dispose();
-
-            Thread.Sleep(2000);
-
-            KinectManager.setup();
+            //sensorChooser.Stop();
+            //faceTrackingViewer.Dispose();
         }
 
         private void KinectSensorOnAllFramesReady(object sender, AllFramesReadyEventArgs allFramesReadyEventArgs)

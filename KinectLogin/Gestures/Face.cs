@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect.Toolkit.FaceTracking;
 
-namespace Gestures
+namespace KinectLogin
 {
     public class Face
     {

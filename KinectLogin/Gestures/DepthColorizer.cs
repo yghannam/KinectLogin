@@ -1,4 +1,4 @@
-﻿namespace Gestures
+﻿namespace KinectLogin
 {
     using System;
     using System.Windows.Media;

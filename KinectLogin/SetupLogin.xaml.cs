@@ -12,9 +12,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Gestures;
 
-namespace KinectLoginWpf
+namespace KinectLogin
 {
     /// <summary>
     /// Interaction logic for SetupLogin.xaml
@@ -29,7 +28,7 @@ namespace KinectLoginWpf
         {
             InitializeComponent();
 
-            //KinectManager.setup();
+            KinectManager.setup();
         }
 
         private void recordGestures()

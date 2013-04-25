@@ -14,7 +14,7 @@ using Microsoft.Kinect;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Speech.Recognition;
 
-namespace Gestures
+namespace KinectLogin
 {
     public class KinectHelper
     {

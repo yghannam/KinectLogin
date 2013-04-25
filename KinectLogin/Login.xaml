@@ -1,4 +1,4 @@
-﻿<Window x:Class="KinectLoginWpf.Login"
+﻿<Window x:Class="KinectLogin.Login"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Kinect Login" Height="576" Width="800" WindowStartupLocation="CenterScreen" Icon="favicon.ico">

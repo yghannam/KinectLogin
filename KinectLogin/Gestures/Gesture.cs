@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Kinect;
 
-namespace Gestures
+namespace KinectLogin
 {
     [Serializable()]
     public class Gesture

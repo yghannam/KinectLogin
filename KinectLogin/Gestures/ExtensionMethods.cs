@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 using System.IO;
 
 
-namespace Gestures
+namespace KinectLogin
 {
     public static class ExtensionMethods
     {
