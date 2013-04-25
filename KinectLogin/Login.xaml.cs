@@ -30,6 +30,9 @@ namespace KinectLogin
         private bool gesturesProvided, voiceProvided;
         private bool faceAuthenticated, gesturesAuthenticated, voiceAuthenticated;
         private bool successDialogShown;
+        private Queue<string> voiceInputTokenQueue;
+        private string voicePassword;
+        private int passwordLength = 0;
 
         public Login()
         {
@@ -68,6 +71,67 @@ namespace KinectLogin
             sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
 
             sensorChooser.Start();
+
+            voiceInputTokenQueue = new Queue<string>();
+
+            if (KinectManager.getVoicePassword() != null && KinectManager.getVoicePassword().getVoiceData() != null)
+            {
+                int i;
+                voicePassword = "";
+                for (i = 0; i < KinectManager.getVoicePassword().getVoiceData().Count; i++)
+                {
+                    if (KinectManager.getVoicePassword().getVoiceData()[i] != null)
+                    {
+                        voicePassword += KinectManager.getVoicePassword().getVoiceData()[i];
+                    }
+                }
+            }
+
+            // Start the speech recognition
+            KinectHelper.StartSpeechEngine();
+
+            KinectHelper.speechEngine.SpeechRecognized += speechEngine_PasswordCheck;
+        }
+
+        private void speechEngine_PasswordCheck(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
+        {
+            // Speech utterance confidence below which we treat speech as if it hadn't been heard
+            const double ConfidenceThreshold = 0.3;
+
+            if (e.Result.Confidence >= ConfidenceThreshold)
+            {
+                if (voiceInputTokenQueue.Count >= KinectManager.getVoicePassword().getVoiceData().Count)
+                {
+                    voiceInputTokenQueue.Dequeue();
+                    voiceInputTokenQueue.Enqueue(e.Result.Semantics.Value.ToString());
+                }
+                else
+                {
+                    voiceInputTokenQueue.Enqueue(e.Result.Semantics.Value.ToString());
+                }
+
+                this.voiceRecognitionQueue.Text = "";
+                foreach (String token in voiceInputTokenQueue)
+                {
+                    this.voiceRecognitionQueue.Text += token + " ";
+                }
+
+                // see if queue contains password
+                int i;
+                string voicePasswordQueue = "";
+                for (i = 0; i < voiceInputTokenQueue.Count; i++)
+                {
+                    if (voiceInputTokenQueue.ElementAt(i) != null)
+                    {
+                        voicePasswordQueue += voiceInputTokenQueue.ElementAt(i);
+                    }
+                }
+
+                if (voicePasswordQueue.Contains(voicePassword))
+                { // Match
+                    voiceAuthenticated = true;
+                }
+            }
         }
 
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs kinectChangedEventArgs)
@@ -181,36 +245,32 @@ namespace KinectLogin
             // Check the gesture recognition AFTER facial recognition
             if (!gesturesAuthenticated && gesturesProvided && faceAuthenticated)
             {
-                bool matched = true;
-                int i;
-                for (i = 0; i < KinectManager.getGestureSet().getGestures().Length; i++)
+                Gesture[] gestures = KinectManager.getGestureSet().getGestures();
+                if (gestures != null)
                 {
-                    // TODO: Compare gestures
-                    //matched = gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
-                }
+                    bool matched = true;
+                    int i;
+                    for (i = 0; i < gestures.Length; i++)
+                    {
+                        // TODO: Compare gestures
+                        //matched = gestureSet.compare(gestureSet.getGestures()[0], gestureSet.getGestures()[1]);
+                    }
 
-                if (matched)
-                {
-                    gesturesAuthenticated = true;
-                    this.gestureRecognitionAuthenticationStatus.Text = "Authenticated";
-                    this.gestureRecognitionAuthenticationStatus.Foreground = Brushes.Green;
-                } // else do nothing...
+                    if (matched)
+                    {
+                        gesturesAuthenticated = true;
+                        this.gestureRecognitionAuthenticationStatus.Text = "Authenticated";
+                        this.gestureRecognitionAuthenticationStatus.Foreground = Brushes.Green;
+                    } // else do nothing...
+                }
             }
 
             // Optional:
             // Check the voice recognition all the time
-            if (!voiceAuthenticated && voiceProvided)
+            if (voiceAuthenticated && voiceProvided)
             {
-                bool matched = true;
-                int i;
-                //TODO: Compare voices
-
-                if (matched)
-                {
-                    voiceAuthenticated = true;
-                    this.voiceRecognitionAuthenticationStatus.Text = "Authenticated";
-                    this.voiceRecognitionAuthenticationStatus.Foreground = Brushes.Green;
-                } // else do nothing...
+                this.voiceRecognitionAuthenticationStatus.Text = "Authenticated";
+                this.voiceRecognitionAuthenticationStatus.Foreground = Brushes.Green;
             }
 
             // Check that all modes are authenticated

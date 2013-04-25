@@ -26,7 +26,7 @@ namespace KinectLogin
         }
 
         public static Skeleton[] skeletonData;
-        private static SpeechRecognitionEngine speechEngine;
+        public static SpeechRecognitionEngine speechEngine;
         public static Gesture gesture;
         public static Voice voice;
         public static bool record = false;

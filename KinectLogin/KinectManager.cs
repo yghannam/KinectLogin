@@ -100,6 +100,7 @@ namespace KinectLogin
         /// </summary>
         public static void UpdateVoiceData(object sender, EventArgs e)
         {
+            /*
             if (voiceRecognition != null)
             {
                 int i;
@@ -110,14 +111,10 @@ namespace KinectLogin
                     bool match = voiceRecognition.compare(voices[i], voicePassword);
                     if (match)
                     {
-                        // Voice match
-                    }
-                    else
-                    {
-                        // No match
-                    }
+                    } // else no match
                 }
             }
+            */
         }
 
         /// <summary>
