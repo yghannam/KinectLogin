@@ -79,6 +79,8 @@ namespace KinectLoginWpf
 
         private void setupVoiceRecognition_Click(object sender, RoutedEventArgs e)
         {
+            KinectHelper.StartSpeechEngine();
+
             VoiceRecognition voiceRecognition = new VoiceRecognition();
 
             for (int i = 1; i <= 2; i++)

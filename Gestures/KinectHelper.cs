@@ -69,14 +69,20 @@ namespace Gestures
 
             // enable returning skeletons while depth is in Near Range
             //kinect.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
-            kinect.SkeletonStream.EnableTrackingInNearRange = true;
-            kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
+            //kinect.SkeletonStream.EnableTrackingInNearRange = true;
+            //kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use Seated Mode
 
             kinect.DepthFrameReady += new EventHandler<DepthImageFrameReadyEventArgs>(kinect_DepthFrameReady); // Get Ready for Skeleton Ready Events
             kinect.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady); // Get Ready for Skeleton Ready Events
 
             kinect.Start(); // Start Kinect sensor
 
+            
+
+        }
+
+        public static void StartSpeechEngine()
+        {
             // Find recognizer and initialize new speech engine with it.
             RecognizerInfo ri = GetKinectRecognizer();
             if (ri != null)
@@ -101,13 +107,12 @@ namespace Gestures
                 speechEngine.LoadGrammar(g);
             }
 
-           
+
             speechEngine.SpeechRecognized += SpeechRecognized;
             speechEngine.SpeechRecognitionRejected += SpeechRejected;
             speechEngine.SetInputToAudioStream(kinect.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
             speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
             speechEngine.RecognizeAsync(RecognizeMode.Multiple);
-
         }
 
         private static RecognizerInfo GetKinectRecognizer()

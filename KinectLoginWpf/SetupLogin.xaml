@@ -7,7 +7,7 @@
         <TextBox x:Name="numGestures" HorizontalAlignment="Left" Height="23" Margin="213,34,0,0" HorizontalContentAlignment="Center" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="32"/>
 
         <Label x:Name="gestureLengthLabel" Content="Seconds For Each Gesture:" HorizontalContentAlignment="Right" HorizontalAlignment="Right"  Margin="0,75,96,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="gestureLength" HorizontalAlignment="Left" Height="23" Margin="213,77,0,0" HorizontalContentAlignment="Center" TextWrapping="Wrap" Text="3.0" VerticalAlignment="Top" Width="32"/>
+        <TextBox x:Name="gestureLength" HorizontalAlignment="Left" Height="23" Margin="213,77,0,0" HorizontalContentAlignment="Center" TextWrapping="Wrap" Text="10.0" VerticalAlignment="Top" Width="32"/>
 
         <Button x:Name="setupFacialRecognition" Content="Setup Facial Recognition" HorizontalAlignment="Stretch" Margin="0,125,0,0" VerticalAlignment="Top" Width="198" Click="setupFacialRecognition_Click" />
         

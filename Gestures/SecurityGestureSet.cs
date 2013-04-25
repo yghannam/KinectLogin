@@ -42,6 +42,7 @@ namespace Gestures
                 KinectHelper.startRecording();
                 ExtensionMethods.timer(seconds);
                 gestures[i - 1] = KinectHelper.stopRecording();
+                gestures[i - 1].extractGestures();
                 System.Console.WriteLine("Finished Recording " + i + "\n");
             }
         }
