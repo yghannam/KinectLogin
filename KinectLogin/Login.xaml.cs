@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,8 @@ namespace KinectLogin
         private bool gesturesProvided, voiceProvided;
         private bool faceAuthenticated, gesturesAuthenticated, voiceAuthenticated;
         private bool successDialogShown;
+        private Thread GestureAuthenticationThread = null;
+
 
         public Login()
         {
@@ -127,6 +130,8 @@ namespace KinectLogin
         {
             sensorChooser.Stop();
             faceTrackingViewer.Dispose();
+            if(GestureAuthenticationThread != null)
+                GestureAuthenticationThread.Abort();
             System.Environment.Exit(0);
         }
 
@@ -165,7 +170,7 @@ namespace KinectLogin
             }
 
             // Check the facial recognition
-            if (!faceAuthenticated && faceTrackingViewer.getFaceModel() != null)
+            if (false)//!faceAuthenticated && faceTrackingViewer.getFaceModel() != null)
             {
                 bool matched = KinectManager.CompareFaces(faceTrackingViewer.getFaceModel());
 
@@ -179,14 +184,25 @@ namespace KinectLogin
 
             // Optional:
             // Check the gesture recognition AFTER facial recognition
-            if (!gesturesAuthenticated && gesturesProvided && faceAuthenticated)
+            if (!gesturesAuthenticated && gesturesProvided)// && faceAuthenticated)
             {
-                bool matched = true;
-                int i;
-                for (i = 0; i < KinectManager.getGestureSet().getGestures().Length; i++)
-                {
+                bool matched = false;
+                //int i;
+                //for (i = 0; i < KinectManager.getGestureSet().getGestures().Length; i++)
+                //{
                     // TODO: Compare gestures
-                    matched = KinectManager.getGestureSet().compare(KinectManager.getGestureSet().getGestures()[0], KinectManager.getGestureSet().getGestures()[1]);
+                //matched = KinectManager.getGestureSet().Authenticate();//compare(KinectManager.getGestureSet().getGestures()[0], KinectManager.getGestureSet().getGestures()[1]);
+                //}
+
+                if (GestureAuthenticationThread == null)
+                {
+                    GestureAuthenticationThread = new Thread(new ThreadStart(KinectManager.getGestureSet().Authenticate));
+                    GestureAuthenticationThread.Start();
+                }
+                else if (!GestureAuthenticationThread.IsAlive)
+                {
+                    matched = KinectManager.getGestureSet().getAuthenticationStatus();
+                    GestureAuthenticationThread = null;
                 }
 
                 if (matched)

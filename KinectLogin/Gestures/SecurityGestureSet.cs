@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.Kinect;
 
 namespace KinectLogin
@@ -10,6 +11,8 @@ namespace KinectLogin
     {
         private Gesture[] gestures;
         private List<double> errors;
+        private Thread AuthenticationThread;
+        private bool authenticationStatus = false;
 
         /// <summary>
         /// Constructor
@@ -27,6 +30,11 @@ namespace KinectLogin
         public Gesture[] getGestures()
         {
             return this.gestures;
+        }
+
+        public bool getAuthenticationStatus()
+        {
+            return this.authenticationStatus;
         }
        
         /// <summary>
@@ -94,6 +102,18 @@ namespace KinectLogin
             else
                 System.Console.WriteLine("Gestures match.");
             return match;
+        }
+
+        public void Authenticate()
+        {
+            System.Console.WriteLine("Recording " + 3);
+            KinectHelper.startRecording();
+            ExtensionMethods.timer(10.0f);
+            gestures[2] = KinectHelper.stopRecording();
+            gestures[2].extractGestures();
+            System.Console.WriteLine("Finished Recording " + 3 + "\n");
+
+            authenticationStatus = compare(gestures[0], gestures[2]);
         }
     }
 }
