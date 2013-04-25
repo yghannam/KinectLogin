@@ -23,6 +23,7 @@ namespace KinectLogin
         Login login;
         int parsedNumGestures;
         double parsedSeconds;
+        FacialRecognitionWindow facialRecognitionWindow;
 
         public SetupLogin()
         {
@@ -41,7 +42,7 @@ namespace KinectLogin
         private void showFacialRecognitionWindow()
         {
             // Show the FacialRecognitionWindow
-            FacialRecognitionWindow facialRecognitionWindow = new FacialRecognitionWindow();
+            facialRecognitionWindow = new FacialRecognitionWindow();
             facialRecognitionWindow.ShowDialog();
 
             this.setupFacialRecognition.IsEnabled = false;
@@ -140,6 +141,8 @@ namespace KinectLogin
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
+            facialRecognitionWindow.stopKinect();
+
             // Open the login window
             login = new Login();
             login.Show();

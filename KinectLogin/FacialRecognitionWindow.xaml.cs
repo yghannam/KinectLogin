@@ -95,6 +95,12 @@
             }
         }
 
+        public void stopKinect()
+        {
+            sensorChooser.Stop();
+            faceTrackingViewer.Dispose();
+        }
+
         private void KinectSensorOnAllFramesReady(object sender, AllFramesReadyEventArgs allFramesReadyEventArgs)
         {
             using (var colorImageFrame = allFramesReadyEventArgs.OpenColorImageFrame())
