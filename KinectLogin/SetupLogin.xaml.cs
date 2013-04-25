@@ -43,7 +43,7 @@ namespace KinectLogin
         {
             // Show the FacialRecognitionWindow
             facialRecognitionWindow = new FacialRecognitionWindow();
-            //facialRecognitionWindow.ShowDialog();
+            facialRecognitionWindow.ShowDialog();
 
             this.setupFacialRecognition.IsEnabled = false;
 

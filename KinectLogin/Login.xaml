@@ -21,7 +21,6 @@
         <Label x:Name="voiceRecognitionLabel" Content="Voice Recognition:" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Margin="0,104,393,0" VerticalAlignment="Top" FontSize="16" Width="191"/>
         <TextBlock x:Name="voiceRecognitionAuthenticationStatus" HorizontalAlignment="Left" Margin="399,109,0,0" TextWrapping="Wrap" Text="Not Authenticated" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FFBF0000" FontSize="16" />
 
-        <Label x:Name="voiceRecognitionQueueLabel" Content="Voice Queue:" HorizontalContentAlignment="Right" HorizontalAlignment="Right" Margin="0,130,392,0" VerticalAlignment="Top" FontSize="16" Width="191"/>
-        <TextBlock x:Name="voiceRecognitionQueue" HorizontalAlignment="Left" Margin="399,139,0,0" TextWrapping="Wrap" Text="Waiting for voice input..." VerticalAlignment="Top" Foreground="Black" FontSize="12" />
+        
     </Grid>
 </Window>

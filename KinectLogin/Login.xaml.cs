@@ -34,10 +34,10 @@ namespace KinectLogin
         private Thread GestureAuthenticationThread = null;
         private Thread SpeechAuthenticationThread = null;
 
-        private Queue<string> voiceInputTokenQueue;
-        private string voicePassword;
-        private int passwordLength = 0;
-        private VoiceRecognition voiceRecognition;
+        //private Queue<string> voiceInputTokenQueue;
+        //private string voicePassword;
+        //private int passwordLength = 0;
+        //private VoiceRecognition voiceRecognition;
 
         public Login()
         {
@@ -245,7 +245,7 @@ namespace KinectLogin
             }
 
             // Check the facial recognition
-            if (false)//!faceAuthenticated && faceTrackingViewer.getFaceModel() != null)
+            if (!faceAuthenticated && faceTrackingViewer.getFaceModel() != null)
             {
                 bool matched = KinectManager.CompareFaces(faceTrackingViewer.getFaceModel());
 
@@ -284,7 +284,7 @@ namespace KinectLogin
 
             // Optional:
             // Check the voice recognition all the time
-            if (!voiceAuthenticated)// && voiceProvided)
+            if (!voiceAuthenticated && voiceProvided)
             {
                 bool matched = false;
                 if (SpeechAuthenticationThread == null)
