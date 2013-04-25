@@ -141,6 +141,11 @@ namespace KinectLogin
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
+            if (KinectHelper.speechEngine != null)
+            {
+                KinectHelper.speechEngine.Dispose();
+            }
+
             facialRecognitionWindow.stopKinect();
 
             // Open the login window

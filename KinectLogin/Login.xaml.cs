@@ -33,6 +33,7 @@ namespace KinectLogin
         private Queue<string> voiceInputTokenQueue;
         private string voicePassword;
         private int passwordLength = 0;
+        private VoiceRecognition voiceRecognition;
 
         public Login()
         {
@@ -91,6 +92,11 @@ namespace KinectLogin
             KinectHelper.StartSpeechEngine();
 
             KinectHelper.speechEngine.SpeechRecognized += speechEngine_PasswordCheck;
+
+            voiceRecognition = new VoiceRecognition();
+
+            voiceRecognition.record(true, 0, KinectManager.UpdateVoiceData);
+
         }
 
         private void speechEngine_PasswordCheck(object sender, Microsoft.Speech.Recognition.SpeechRecognizedEventArgs e)
@@ -130,6 +136,9 @@ namespace KinectLogin
                 if (voicePasswordQueue.Contains(voicePassword))
                 { // Match
                     voiceAuthenticated = true;
+
+                    // Stop the recording
+                    voiceRecognition.record(false, 0, KinectManager.UpdateVoiceData);
                 }
             }
         }
