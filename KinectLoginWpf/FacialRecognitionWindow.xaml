@@ -17,9 +17,15 @@
         </Style>
     </Window.Resources>
 
-    <Grid Name="MainGrid" Width="640" Height="480">
+    <Grid Name="MainGrid" Width="640" Height="480" Margin="0,90,0,0">
+        <Label Content="Status:" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" Margin="222,-139,338,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBlock x:Name="faceStatus" HorizontalAlignment="Center" Margin="307,-134,9,0" TextWrapping="Wrap" Text="Scanning..." VerticalAlignment="Top" FontSize="18" Width="324"/>
+
+        <Button Content="Record 3D Face Model" HorizontalAlignment="Stretch" Margin="0,-90,0,0" VerticalAlignment="Top" Width="150" Click="Save_Click"/>
+
+        <Button x:Name="testFaceButton" Content="Compare with Recorded 3D Face Model" HorizontalAlignment="Stretch" Margin="0,-50,0,0" VerticalAlignment="Top" Width="250" Click="Test_Click" IsEnabled="False"/>
+
         <Image Name="ColorImage"/>
         <local:FaceTrackingViewer x:Name="faceTrackingViewer" />
-        <Button Content="Record 3D Face Model" HorizontalAlignment="Stretch" Margin="0,-70,0,0" VerticalAlignment="Top" Width="150" Click="Save_Click"/>
     </Grid>
 </Window>

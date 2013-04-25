@@ -11,19 +11,10 @@ namespace Gestures
     public class Face
     {
         private EnumIndexableCollection<FeaturePoint, Vector3DF> faceModel;
-
-        // Unused
-        Vector3DF[] headPoints;
-
+        
         public Face(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModel)
         {
             this.faceModel = faceModel;
-        }
-
-        public Face(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModel, Vector3DF[] headPoints)
-        {
-            this.faceModel = faceModel;
-            this.headPoints = headPoints;
         }
 
         public EnumIndexableCollection<FeaturePoint, Vector3DF> getFaceModel() 
@@ -36,16 +27,6 @@ namespace Gestures
             this.faceModel = faceModel;
         }
 
-        public Vector3DF[] getHeadPoints()
-        {
-            return headPoints;
-        }
-
-        public void setHeadPoints(Vector3DF[] headPoints)
-        {
-            this.headPoints = headPoints;
-        }
-
         /// <summary>
         /// Compares this.faceModel with faceModelCandidate
         /// </summary>
@@ -53,12 +34,13 @@ namespace Gestures
         /// <returns>true if the </returns>
         public bool compare(EnumIndexableCollection<FeaturePoint, Vector3DF> faceModelCandidate)
         {
-            // +/- 5% error for distance
-            float distanceErrorThreshold = 0.05F;
+            // +/- 15% error for distance
+            float distanceErrorThreshold = 0.15F;
             float lowDistance, highDistance;
 
             // threshold for the number of wrong distances
-            int numWrongPointsThreshold = 20;
+            // This is an allowance for noisy data in the face model
+            int numWrongPointsThreshold = 500;
             int numWrongPoints = 0;
 
             int numFaceFeatures = faceModel.Count;
@@ -69,7 +51,7 @@ namespace Gestures
 
             float[,] faceModelCandidateDistanceMatrix = new float[numFaceCandidateFeatures, numFaceCandidateFeatures];
 
-            // calculate the distance
+            // Calculate the distances:
 
             // For each row of the distanceMatrix
             foreach (int i in Enum.GetValues(typeof(FeaturePoint)))
@@ -105,7 +87,7 @@ namespace Gestures
             }
             else
             {
-                return true;
+                return false;
             }
         }
 

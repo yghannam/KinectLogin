@@ -89,6 +89,10 @@
         {
             sensorChooser.Stop();
             faceTrackingViewer.Dispose();
+
+            Thread.Sleep(2000);
+
+            KinectManager.setup();
         }
 
         private void KinectSensorOnAllFramesReady(object sender, AllFramesReadyEventArgs allFramesReadyEventArgs)
@@ -126,17 +130,30 @@
             {
                 KinectManager.SaveFace(faceTrackingViewer.getFaceModel());
 
-                Thread.Sleep(4000);
+                this.faceStatus.Text = "Saving...";
 
+                Thread.Sleep(2000);
+
+                this.faceStatus.Text = "Face was saved.";
+
+                this.testFaceButton.IsEnabled = true;
+            }
+        }
+
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            if (faceTrackingViewer.getFaceModel() != null)
+            {
                 bool matched = KinectManager.CompareFaces(faceTrackingViewer.getFaceModel());
 
-                MessageBox.Show("Face was saved. Match:" + matched);
-
-                this.Close();
-
-                Thread.Sleep(4000);
-
-                KinectManager.setup();
+                if (matched)
+                {
+                    this.faceStatus.Text = "Current face matches saved face.";
+                }
+                else
+                {
+                    this.faceStatus.Text = "Current face DOES NOT match.";
+                }
             }
         }
     }
